@@ -8,13 +8,12 @@
 class Piece {
 	int		_x;
 	int		_y;
-	int		_type;
 
 public:
 	
 //	Construct
 	Piece();
-	Piece(int x, int y, int type);
+	Piece(int x, int y);
 	
 // Destruct
 	~Piece();
@@ -27,7 +26,6 @@ public:
 //	Setters
 	void			SetX(int x);
 	void			SetY(int y);
-	void			SetType(int type);
 	void			MovePiece(int x, int y);
 
 private:

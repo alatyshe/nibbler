@@ -12,35 +12,46 @@ RESET 	= "\033[0;0m"
 #-------------------
 
 CXX			= clang++
-CXXFLAGS	= -std=gnu++14 -Wall -Wextra -Werror
+# CXXFLAGS	= -std=gnu++14 -Wall -Wextra -Werror
 
 NAME		= nibbler
 
 
 #------ path -------
-FILES_PATH		= ./files
-OBJECTS_PATH	= ./objects
+CORE_PATH			= ./core/files
+NCURSES_PATH		= ./ncurses/files
+
+
+NCURSES_OBJECTS_PATH	= ./Ncurses/objects
+CORE_OBJECTS_PATH		= ./core/objects
 
 
 #------ files ------
-FILES_FILES		= main Game Piece Exception Parser Lexer 
+CORE_FILES		= main Game Piece Exception Parser Lexer 
+NCURSES_FILES	= n_Curses 
 
 #------ other ------
-FILES_OBJ		= $(addprefix $(OBJECTS_PATH)/, $(addsuffix .o, $(FILES_FILES)))
+CORE_OBJ		= $(addprefix $(CORE_OBJECTS_PATH)/, $(addsuffix .o, $(CORE_FILES)))
+NCURSES_OBJ		= $(addprefix $(NCURSES_OBJECTS_PATH)/, $(addsuffix .o, $(NCURSES_FILES)))
 
 
 #------ make ------
 all: $(NAME)
 
-$(NAME): $(FILES_OBJ) 
+$(NAME): $(CORE_OBJ) $(NCURSES_OBJ) 
 	@echo "\n"
 	@echo $(CYAN) "\tCompiling $@"$(RESET)
 	@$(CXX) -lncurses -o $@ $^
 	@echo $(GREEN) "\tnibbler\t\t- has been made\n"$(RESET)
 
-$(OBJECTS_PATH)/%.o: $(FILES_PATH)/%.cpp
+$(CORE_OBJECTS_PATH)/%.o: $(CORE_PATH)/%.cpp
 	@echo $(PURPLE) "\tCompiling $<"$(RESET)
-	@mkdir $(OBJECTS_PATH) 2> /dev/null || true
+	@mkdir $(CORE_OBJECTS_PATH) 2> /dev/null || true
+	@$(CXX) $(CXXFLAGS) -o $@ -c $<
+
+$(NCURSES_OBJECTS_PATH)/%.o: $(NCURSES_PATH)/%.cpp
+	@echo $(PURPLE) "\tCompiling $<"$(RESET)
+	@mkdir $(NCURSES_OBJECTS_PATH) 2> /dev/null || true
 	@$(CXX) $(CXXFLAGS) -o $@ -c $<
 
 
@@ -48,9 +59,9 @@ $(OBJECTS_PATH)/%.o: $(FILES_PATH)/%.cpp
 
 clean:
 	@echo $(YELLOW)"\t\t\t\tAVM"$(RESET)
-	@rm -f $(FILES_OBJ)
+	@rm -f $(CORE_OBJ)
 	@echo $(RED) "\t.o files have been cleaned."$(RESET)
-	@rm -rf $(OBJECTS_PATH)
+	@rm -rf $(CORE_OBJECTS_PATH)
 	@echo $(RED) "\t./objects path have been cleaned."$(RESET)
 
 #------ make fclean ------
@@ -59,7 +70,7 @@ fclean:
 	@echo $(YELLOW)"\t\t\t\tAVM"$(RESET)
 	@rm -f $(FILES_OBJ)
 	@echo $(RED) "\t.o files have been cleaned."$(RESET)
-	@rm -rf $(OBJECTS_PATH)
+	@rm -rf $(CORE_OBJECTS_PATH)
 	@echo $(RED) "\t./objects path have been cleaned."$(RESET)
 	@rm -f $(NAME)
 	@echo $(RED) "\tnibbler have been cleaned.\n"$(RESET)

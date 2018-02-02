@@ -1,4 +1,4 @@
-# include "../header/Exception.hpp"
+# include "../../header/Exception.hpp"
 
 Exception::Exception() : _error("") { ; };
 Exception::~Exception() throw () { ; };

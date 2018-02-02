@@ -12,15 +12,31 @@
 
 # define INTEGER			"([0-9]+)"
 
+# define SNAKE_LENGTH		4
+
+//	Defines for map filling 
+# define EMPTY				0
+# define SNAKE_BODY			1
+# define SNAKE_HEAD			2
+# define WALL				3
+# define APPLE				4
+
+# define MAX_HEIGHT			101
+# define MAX_WIDTH			101
+# define SCORE_HEIGHT		4
+# define BORDERS			2
+
+
 # include <regex>
 # include <vector>
 # include <string>
 # include <iostream>
 
+# include <fstream>
+
 // SLEEP
 # include <chrono>
 # include <thread>
-
 # include <ncurses.h>
 
 # include "../header/Piece.hpp"
@@ -32,41 +48,47 @@ enum Visual{
 class Game {
 
 protected:
-	//	Поле
-
+	//	Map information
 	char	**_map;
 	int		_width;
 	int		_height;
 
+	//	Information about game
 	int		_score;
 	int		_level;
 	int		_difficult;
 
+	//	Type of visualisation
 	Visual	_visual_type;
 
-	//	Следующий ход для змейки
+	//	Next coord for piece(snake body). Can have any integer
 	int		_next_x;
 	int 	_next_y;
 
-	//	Куда двигается  голова
+	//	Where move snake head at the moment(). Can have -1 0 1
 	int		_head_move_x;
 	int		_head_move_y;
 
-	//	Змейка
+	//	Snake
 	std::vector<Piece *>	_snake;
 
 public:
+
 	//	Construct
 	Game();
 	Game(int width, int height);
+
 	//	Destruct
 	~Game();
 
-	// int					checkLive();
 	int					putSnakeOnMap();
-	void				moveSnake();
-	
-	void				printMap();
+	void				putWallsOnMap();
+	void				putAppleOnMap();
+	void				moveSnakeBody();
+
+	void				setHeadMoveXY(int x, int y);
+	// void				setHeadMoveY(int y);
+
 
 	void 				cleanMapFromSnake();
 	void				runGame();
@@ -78,6 +100,8 @@ public:
 	int					getDifficult();
 	char				**getMap();
 
+	void				printMap();
+
 private:
 	//	Construct
 	Game(const Game &src);
@@ -85,5 +109,8 @@ private:
 	Game&				operator=(const Game &src);
 
 };
+
+
+void		n_curses_visual(Game *g);
 
 #endif
