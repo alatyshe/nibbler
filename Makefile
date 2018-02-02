@@ -69,8 +69,10 @@ clean:
 fclean:
 	@echo $(YELLOW)"\t\t\t\tAVM"$(RESET)
 	@rm -f $(FILES_OBJ)
+	@rm -f $(CORE_OBJ)
 	@echo $(RED) "\t.o files have been cleaned."$(RESET)
 	@rm -rf $(CORE_OBJECTS_PATH)
+	@rm -rf $(NCURSES_OBJECTS_PATH)
 	@echo $(RED) "\t./objects path have been cleaned."$(RESET)
 	@rm -f $(NAME)
 	@echo $(RED) "\tnibbler have been cleaned.\n"$(RESET)
