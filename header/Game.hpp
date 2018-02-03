@@ -84,10 +84,10 @@ public:
 	int					putSnakeOnMap();
 	void				putWallsOnMap();
 	void				putAppleOnMap();
+	void				addPieceToSnake();
 	void				moveSnakeBody();
 
 	void				setHeadMoveXY(int x, int y);
-	// void				setHeadMoveY(int y);
 
 
 	void 				cleanMapFromSnake();

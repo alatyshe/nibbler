@@ -22,8 +22,7 @@ void			GameIntilization(WINDOW *screen, WINDOW *score) {
 
 void            readInput(Game *g, WINDOW *screen) {
 	int ch;
-	
-	timeout(-1);
+
 	ch = wgetch(screen);
 	if (ch == 'q')
 	{
@@ -39,7 +38,7 @@ void            readInput(Game *g, WINDOW *screen) {
 	if (ch == KEY_DOWN)
 		g->setHeadMoveXY(0, 1);
 
-	flushinp();	//	сброс разного дерьма который наклацали
+	// flushinp();	//	сброс разного дерьма который наклацали
 }
 
 void			displayMap(Game *g, WINDOW *screen) {
@@ -122,7 +121,7 @@ void			displayScore(Game *g, WINDOW *score) {
 		mvwprintw(score, SCORE_HEIGHT + 1, i, "-");
 	}
 }
-void			displayMenu(Game *g, WINDOW *screen, WINDOW *score) {
+void			displayMainMenu(Game *g, WINDOW *screen, WINDOW *score) {
 	char		**map;
 	int			width;
 	int			height;
@@ -149,6 +148,30 @@ void			displayMenu(Game *g, WINDOW *screen, WINDOW *score) {
 	wrefresh(screen);	// Вывод приветствия на настоящий экран
 	wrefresh(score);	// Вывод приветствия на настоящий экран
 }
+void			displayPauseMenu(Game *g, WINDOW *screen, WINDOW *score) {
+	char		**map;
+	int			width;
+	int			height;
+
+	wclear(screen);
+	wclear(score);
+
+	map = g->getMap();
+	width = g->getWidth();
+	height = g->getHeight();
+
+	wattron(screen, COLOR_PAIR(1) | WA_BOLD);
+	mvwprintw(screen, height / 2 - 2, width / 2, "PAUSE");
+	
+	wattron(screen,COLOR_PAIR(2));
+	mvwprintw(screen, height / 2, width / 2, "CONTINUE");
+
+	wattron(screen,COLOR_PAIR(5));
+	mvwprintw(screen, height / 2 + 1, width / 2, "MAIN MENU");
+
+	wrefresh(screen);	// Вывод приветствия на настоящий экран
+	wrefresh(score);	// Вывод приветствия на настоящий экран
+}
 
 void			n_curses_visual(Game *g)
 {
@@ -161,7 +184,7 @@ void			n_curses_visual(Game *g)
 	// getmaxyx(stdscr, parent_y, parent_x);
 	// wclear(stdscr);
 
-
+	std::cin.sync();
 	if (!haha)
 	{
 		haha = 1;
@@ -175,21 +198,18 @@ void			n_curses_visual(Game *g)
 		keypad(score, TRUE);    //  для восприятия стрелочек
 	}
 
-	
-	// displayMenu(g, screen, score);
-
-
-	readInput(g, screen);
-	std::cin.sync();
 
 	wclear(screen);
 	wclear(score);
 	
+	// displayMainMenu(g, screen, score);
+	// displayPauseMenu(g, screen, score);
 	displayMap(g, screen);
 	displayScore(g, score);
 
 	wrefresh(screen);                   // Вывод приветствия на настоящий экран
 	wrefresh(score);                   // Вывод приветствия на настоящий экран
+	readInput(g, screen);
 	// while (1);
 }
 

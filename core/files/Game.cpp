@@ -19,7 +19,7 @@ Game::Game(int width, int height) {
 
 	//	Information about game
 	this->_score = 0;
-	this->_level = 1;
+	this->_level = 2;
 	this->_difficult = 1;
 
 	//	Type of visualisation
@@ -115,22 +115,31 @@ void		Game::putAppleOnMap() {
 int 		Game::putSnakeOnMap() {
 	int			x;
 	int			y;
+	int			piece;
 	std::vector<Piece *>::iterator i;
 
 	i = this->_snake.begin();
+	piece = 0;
 	while (i != this->_snake.end()) {
 
 		x = (*i)->GetX();
 		y = (*i)->GetY();
 		if (x < 0 || y < 0 || x >= this->_width || y >= this->_height)
-			return(1);
+		{
+			std::cout << x << std::endl;
+			return(y);
+		}
 		else if (this->_map[y][x] == SNAKE_HEAD 
 			|| this->_map[y][x] == SNAKE_BODY
 			|| this->_map[y][x] == WALL
 			)
-			return(1);
+			return(2);
 		else if (this->_map[y][x] == APPLE)
-			;//	Add new piece at to the snake
+		{
+			this->_map[y][x] = SNAKE_HEAD;
+			this->putAppleOnMap();
+			piece = 1;
+		}
 		else
 		{
 			if (i == this->_snake.begin())
@@ -140,6 +149,8 @@ int 		Game::putSnakeOnMap() {
 		}
 		i++;
 	}
+	if (piece == 1)
+		this->_snake.push_back(new Piece(1, 15));
 	return(0);
 }
 
