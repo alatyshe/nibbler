@@ -26,7 +26,7 @@ public:
 //	Setters
 	void			SetX(int x);
 	void			SetY(int y);
-	void			MovePiece(int x, int y);
+	// void			MovePiece(int x, int y);
 
 private:
 	Piece	&operator=(const Piece& src);

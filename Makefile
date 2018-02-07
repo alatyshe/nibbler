@@ -27,7 +27,7 @@ CORE_OBJECTS_PATH		= ./core/objects
 
 
 #------ files ------
-CORE_FILES		= main Game Piece Exception Parser Lexer 
+CORE_FILES		= main Game Piece Exception Parser Lexer Player
 NCURSES_FILES	= n_Curses 
 
 #------ other ------

@@ -25,7 +25,7 @@ Game::Game(int width, int height) {
 	//	Type of visualisation
 	this->_visual_type = NCURSES;
 
-	//	Type of visualisation
+	//	Next move for body
 	this->_next_x = 0;
 	this->_next_y = 0;
 
@@ -45,41 +45,57 @@ Game::Game(int width, int height) {
 **	Getters
 */
 
-int					Game::getScore()		{ return(this->_score); }
-int					Game::getLevel()		{ return(this->_level); }
-int					Game::getDifficult()	{ return(this->_difficult); }
-int					Game::getWidth()		{ return(this->_width); }
-int					Game::getHeight()		{ return(this->_height); }
-char				**Game::getMap()		{ return(this->_map); }
+int			Game::getScore()		{ return(this->_score); }
+int			Game::getLevel()		{ return(this->_level); }
+int			Game::getDifficult()	{ return(this->_difficult); }
+int			Game::getWidth()		{ return(this->_width); }
+int			Game::getHeight()		{ return(this->_height); }
+char		**Game::getMap()		{ return(this->_map); }
 
-
-void 		Game::moveSnakeBody() {
+int 		Game::putSnakeOnMap() {
 	int			x;
 	int			y;
+	bool		apple;
 	std::vector<Piece *>::iterator i;
 
 	i = this->_snake.begin();
-	while (i != _snake.end()) {
+	apple = false;
+	while (i != this->_snake.end()) {
 
 		x = (*i)->GetX();
 		y = (*i)->GetY();
-
-		if (i == this->_snake.begin()) {
-			(*i)->SetX(x + this->_head_move_x);
-			(*i)->SetY(y + this->_head_move_y);
-		} else {
-			(*i)->SetX(this->_next_x);
-			(*i)->SetY(this->_next_y);
+		if (x < 0 || y < 0 || x >= this->_width || y >= this->_height)
+		{
+			std::cout << x << std::endl;
+			return(y);
 		}
-
-		this->_next_x = x;
-		this->_next_y = y;
+		else if (this->_map[y][x] == SNAKE_HEAD 
+			|| this->_map[y][x] == SNAKE_BODY
+			|| this->_map[y][x] == WALL
+			)
+			return(2);
+		else if (this->_map[y][x] == APPLE)
+		{
+			this->_map[y][x] = SNAKE_HEAD;
+			apple = true;
+		}
+		else
+		{
+			if (i == this->_snake.begin())
+				this->_map[y][x] = SNAKE_HEAD;
+			else
+				this->_map[y][x] = SNAKE_BODY;
+		}
 		i++;
 	}
-	this->_next_x = 0;
-	this->_next_y = 0;
+	if (apple)
+	{
+		this->_score += 100;
+		this->putAppleOnMap();
+		this->_snake.push_back(new Piece());
+	}
+	return(0);
 }
-
 void		Game::putWallsOnMap() {
 	int 	total_walls;
 	int		y;
@@ -111,49 +127,6 @@ void		Game::putAppleOnMap() {
 		}
 	}
 }
-
-int 		Game::putSnakeOnMap() {
-	int			x;
-	int			y;
-	int			piece;
-	std::vector<Piece *>::iterator i;
-
-	i = this->_snake.begin();
-	piece = 0;
-	while (i != this->_snake.end()) {
-
-		x = (*i)->GetX();
-		y = (*i)->GetY();
-		if (x < 0 || y < 0 || x >= this->_width || y >= this->_height)
-		{
-			std::cout << x << std::endl;
-			return(y);
-		}
-		else if (this->_map[y][x] == SNAKE_HEAD 
-			|| this->_map[y][x] == SNAKE_BODY
-			|| this->_map[y][x] == WALL
-			)
-			return(2);
-		else if (this->_map[y][x] == APPLE)
-		{
-			this->_map[y][x] = SNAKE_HEAD;
-			this->putAppleOnMap();
-			piece = 1;
-		}
-		else
-		{
-			if (i == this->_snake.begin())
-				this->_map[y][x] = SNAKE_HEAD;
-			else
-				this->_map[y][x] = SNAKE_BODY;
-		}
-		i++;
-	}
-	if (piece == 1)
-		this->_snake.push_back(new Piece(1, 15));
-	return(0);
-}
-
 void		Game::setHeadMoveXY(int x, int y) {
 	if (x != 0)
 	{
@@ -172,7 +145,32 @@ void		Game::setHeadMoveXY(int x, int y) {
 		}
 	}
 }
+void 		Game::moveSnakeBody() {
+	int			x;
+	int			y;
+	std::vector<Piece *>::iterator i;
 
+	i = this->_snake.begin();
+	while (i != _snake.end()) {
+
+		x = (*i)->GetX();
+		y = (*i)->GetY();
+
+		if (i == this->_snake.begin()) {
+			(*i)->SetX(x + this->_head_move_x);
+			(*i)->SetY(y + this->_head_move_y);
+		} else {
+			(*i)->SetX(this->_next_x);
+			(*i)->SetY(this->_next_y);
+		}
+
+		this->_next_x = x;
+		this->_next_y = y;
+		i++;
+	}
+	this->_next_x = 0;
+	this->_next_y = 0;
+}
 void 		Game::cleanMapFromSnake() {
 	for (int i = 0; i < this->_height; i++)
 	{
@@ -184,6 +182,7 @@ void 		Game::cleanMapFromSnake() {
 		}
 	}
 }
+// void		Game::changeLib() { }
 
 void		Game::runGame()
 {
@@ -194,44 +193,21 @@ void		Game::runGame()
 		i = putSnakeOnMap();
 		//	PUT HERE VISUAL
 		if (this->_visual_type == NCURSES)
-			n_curses_visual(this);
+			n_curses_visual(this, 0);
 		
 		if (i != 3 && i != 0)
 		{
 			if (this->_visual_type == NCURSES)
-				endwin();	// Выход из curses-режима. Обязательная команда.
+			{
+				n_curses_visual(this, 1);
+				endwin();
+			}
 			break ;
-		}	
-		// printMap();
+		}
 		cleanMapFromSnake();
-
 		moveSnakeBody();
 		std::this_thread::sleep_for(std::chrono::milliseconds(260 / this->_level));
 	}
 	std::cout << i << std::endl;
 	std::cout << "Game Over" << std::endl;
-}
-
-
-void 		Game::printMap() {
-	std::cout << "\033[0;0H";
-	for (int i = 0; i < this->_height; i++)
-	{
-		for (int j = 0; j < this->_width; j++)
-		{
-			if (this->_map[i][j] == 1)
-					std::cout << MAGENTA << '*' << RESET;
-			else if (this->_map[i][j] == 2)
-					std::cout << RED << '#' << RESET;
-			else if (this->_map[i][j] == 3)
-					std::cout << RED << 'O' << RESET;
-			else
-					std::cout << '.';
-		}
-			std::cout << std::endl;
-	}
-		std::cout << GREEN << "Score : " << this->_score << std::endl;
-		std::cout << "Level : " << this->_level << std::endl;
-		std::cout << "Difficult : " << this->_difficult << RESET << std::endl;
-		std::cout << std::endl << std::endl;
 }

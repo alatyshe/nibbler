@@ -14,18 +14,18 @@
 
 # define SNAKE_LENGTH		4
 
-//	Defines for map filling 
+//	Defines for map fill
 # define EMPTY				0
 # define SNAKE_BODY			1
 # define SNAKE_HEAD			2
 # define WALL				3
 # define APPLE				4
 
+//	Defines for map sizes
 # define MAX_HEIGHT			101
 # define MAX_WIDTH			101
 # define SCORE_HEIGHT		4
 # define BORDERS			2
-
 
 # include <regex>
 # include <vector>
@@ -42,7 +42,11 @@
 # include "../header/Piece.hpp"
 
 enum Visual{
-	NCURSES
+	NCURSES,
+	SFML,
+	GLFW,
+	SDL2,
+	QT
 };
 
 class Game {
@@ -100,7 +104,6 @@ public:
 	int					getDifficult();
 	char				**getMap();
 
-	void				printMap();
 
 private:
 	//	Construct
@@ -111,6 +114,6 @@ private:
 };
 
 
-void		n_curses_visual(Game *g);
+void		n_curses_visual(Game *g, int);
 
 #endif
