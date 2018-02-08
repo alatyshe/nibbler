@@ -1,5 +1,7 @@
-#include <ncurses.h>
 #include "../../header/Game.hpp"
+extern "C" {
+	#include <ncurses.h>
+}
 
 void			Setup(WINDOW *screen, WINDOW *score) {
 	setlocale(LC_ALL, "");

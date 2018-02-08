@@ -1,5 +1,6 @@
 #include "../../header/Game.hpp"
 #include "../../header/Parser.hpp"
+#include <dlfcn.h>
 
 int				main(int argc, char **argv) {
 	int			x;
@@ -12,6 +13,7 @@ int				main(int argc, char **argv) {
 
 		x = Parser::parseNumber(first);
 		y = Parser::parseNumber(second);
+		dlopen ("libcurses.dylib", RTLD_NOW);
 		if (x < MAX_WIDTH && x > 0 && y > 0 && y < MAX_HEIGHT)
 		{
 			game = new Game(x, y);

@@ -16,66 +16,32 @@ CXX			= clang++
 
 NAME		= nibbler
 
-
-#------ path -------
-CORE_PATH			= ./core/files
-NCURSES_PATH		= ./ncurses/files
-
-
-NCURSES_OBJECTS_PATH	= ./Ncurses/objects
-CORE_OBJECTS_PATH		= ./core/objects
-
-
-#------ files ------
-CORE_FILES		= main Game Piece Exception Parser Lexer Player
-NCURSES_FILES	= n_Curses 
-
-#------ other ------
-CORE_OBJ		= $(addprefix $(CORE_OBJECTS_PATH)/, $(addsuffix .o, $(CORE_FILES)))
-NCURSES_OBJ		= $(addprefix $(NCURSES_OBJECTS_PATH)/, $(addsuffix .o, $(NCURSES_FILES)))
-
-
 #------ make ------
 all: $(NAME)
 
-$(NAME): $(CORE_OBJ) $(NCURSES_OBJ) 
-	@echo "\n"
-	@echo $(CYAN) "\tCompiling $@"$(RESET)
-	@$(CXX) -lncurses -o $@ $^
-	@echo $(GREEN) "\tnibbler\t\t- has been made\n"$(RESET)
+$(NAME): $(CORE_OBJ)
+	@make -C core/
+	@make -C ncurses/
+	
+	@$(CXX) -lcurses -o $@ $^ -L. -lcore -fPIC -L. -lncurses
 
-$(CORE_OBJECTS_PATH)/%.o: $(CORE_PATH)/%.cpp
-	@echo $(PURPLE) "\tCompiling $<"$(RESET)
-	@mkdir $(CORE_OBJECTS_PATH) 2> /dev/null || true
-	@$(CXX) $(CXXFLAGS) -o $@ -c $<
 
-$(NCURSES_OBJECTS_PATH)/%.o: $(NCURSES_PATH)/%.cpp
-	@echo $(PURPLE) "\tCompiling $<"$(RESET)
-	@mkdir $(NCURSES_OBJECTS_PATH) 2> /dev/null || true
-	@$(CXX) $(CXXFLAGS) -o $@ -c $<
+	@echo $(GREEN) "\tnibbler\t\t\t- has been made\n"$(RESET)
 
 
 #------ make clean ------
 
 clean:
-	@echo $(YELLOW)"\t\t\t\tAVM"$(RESET)
-	@rm -f $(CORE_OBJ)
-	@echo $(RED) "\t.o files have been cleaned."$(RESET)
-	@rm -rf $(CORE_OBJECTS_PATH)
-	@echo $(RED) "\t./objects path have been cleaned."$(RESET)
+	@make clean -C core/
+	@make clean -C ncurses/
+
 
 #------ make fclean ------
 
 fclean:
-	@echo $(YELLOW)"\t\t\t\tAVM"$(RESET)
-	@rm -f $(FILES_OBJ)
-	@rm -f $(CORE_OBJ)
-	@echo $(RED) "\t.o files have been cleaned."$(RESET)
-	@rm -rf $(CORE_OBJECTS_PATH)
-	@rm -rf $(NCURSES_OBJECTS_PATH)
-	@echo $(RED) "\t./objects path have been cleaned."$(RESET)
 	@rm -f $(NAME)
-	@echo $(RED) "\tnibbler have been cleaned.\n"$(RESET)
+	@make fclean -C core/
+	@make fclean -C ncurses/
 
 #------ make re ------
 re: fclean all

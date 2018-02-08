@@ -40,11 +40,9 @@ Game::Game(int width, int height) {
 	for (int i = 0; i < SNAKE_LENGTH; i++)
 		this->_snake.insert(this->_snake.begin(), new Piece(width / 2 + i - 3, height / 2));
 }
-
 /*
 **	Getters
 */
-
 int			Game::getScore()		{ return(this->_score); }
 int			Game::getLevel()		{ return(this->_level); }
 int			Game::getDifficult()	{ return(this->_difficult); }
