@@ -186,26 +186,40 @@ void		Game::runGame()
 {
 	int		i;
 
-	while(true)
+
+	std::cout << "YE" << std::endl;
+	void	(*fun)(Game *g, int game_over);
+	void 	*handle = dlopen("./libcurses.dylib", RTLD_LAZY);
+
+	if (!handle)
 	{
-		i = putSnakeOnMap();
-		//	PUT HERE VISUAL
-		if (this->_visual_type == NCURSES)
-			n_curses_visual(this, 0);
-		
-		if (i != 3 && i != 0)
-		{
-			if (this->_visual_type == NCURSES)
-			{
-				n_curses_visual(this, 1);
-				endwin();
-			}
-			break ;
-		}
-		cleanMapFromSnake();
-		moveSnakeBody();
-		std::this_thread::sleep_for(std::chrono::milliseconds(260 / this->_level));
+		std::cout << "FUCK" << std::endl;
+		return;
 	}
+
+	*(void **) (&fun) = dlsym(handle, "Ncurses");
+	// (*fun)();
+
+	// while(true)
+	// {
+	// 	i = putSnakeOnMap();
+	// 	//	PUT HERE VISUAL
+	// 	if (this->_visual_type == NCURSES)
+	// 		n_curses_visual(this, 0);
+		
+	// 	if (i != 3 && i != 0)
+	// 	{
+	// 		if (this->_visual_type == NCURSES)
+	// 		{
+	// 			n_curses_visual(this, 1);
+	// 			endwin();
+	// 		}
+	// 		break ;
+	// 	}
+	// 	cleanMapFromSnake();
+	// 	moveSnakeBody();
+	// 	std::this_thread::sleep_for(std::chrono::milliseconds(260 / this->_level));
+	// }
 	std::cout << i << std::endl;
 	std::cout << "Game Over" << std::endl;
 }

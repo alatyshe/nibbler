@@ -37,9 +37,14 @@
 // SLEEP
 # include <chrono>
 # include <thread>
-# include <ncurses.h>
+extern "C" {
+	# include <ncurses.h>
+	# include <dlfcn.h>
+}
 
 # include "../header/Piece.hpp"
+
+extern "C" class Ncruses;
 
 enum Visual{
 	NCURSES,
@@ -114,6 +119,6 @@ private:
 };
 
 
-void		n_curses_visual(Game *g, int);
+extern "C" void		n_curses_visual(Game *g, int);
 
 #endif

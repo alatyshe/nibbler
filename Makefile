@@ -23,7 +23,7 @@ $(NAME): $(CORE_OBJ)
 	@make -C core/
 	@make -C ncurses/
 	
-	@$(CXX) -lcurses -ldl -o $@ $^ -L. -lcore -fPIC -L. -lncurses
+	@$(CXX) -lcurses -ldl -o $@ $^ -L. -lcore -fPIC 
 
 	@echo $(GREEN) "\tnibbler\t\t\t- has been made\n"$(RESET)
 

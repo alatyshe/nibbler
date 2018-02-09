@@ -1,6 +1,5 @@
 #include "../../header/Game.hpp"
 #include "../../header/Parser.hpp"
-#include <dlfcn.h>
 
 // typedef 
 
@@ -18,22 +17,9 @@ int				main(int argc, char **argv) {
 
 
 
-
-
-
-		void	(*fun)(void);
-		void 	*handle = dlopen("./libcurses.dylib", RTLD_LAZY);
-
-		if (!handle)
-		{
-			std::cout << "FUCK" << std::endl;
-			return(0);
-		}
-		*(void **) (&fun) = dlsym(handle, "bbbb");
-		(*fun)();
 		// dlclose(handle);
 		// printf("Return code: %d\n",x);
-		return 0;
+		// return 0;
 
 
 
@@ -57,14 +43,14 @@ int				main(int argc, char **argv) {
 
 
 
-
-
-		if (x < MAX_WIDTH && x > 0 && y > 0 && y < MAX_HEIGHT)
-		{
-			// game = new Game(x, y);
-			// game->runGame();
-			return (0);
-		}
+		// if (x < MAX_WIDTH && x > 0 && y > 0 && y < MAX_HEIGHT)
+		// {
+		// 	game = new Game(x, y);
+		// 	std::cout << "YE" << std::endl;
+		// 	game->runGame();
+		// 	std::cout << "YE" << std::endl;
+		// 	return (0);
+		// }
 
 	}
 	std::cout << "Usage:" << std::endl;

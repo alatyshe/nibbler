@@ -13,7 +13,7 @@ RESET 	= "\033[0;0m"
 
 CXX				= clang++
 # CXXFLAGS		= -std=gnu++14 -Wall -Wextra -Werror
-CPPFLAGS		= -I../header
+CPPFLAGS		= -I./header
 NCURSES_FLAGS	= -lncurses
 DYN_LIB_FLAGS	= -shared -fPIC
 LIBRARY			= -L../ -lcore
@@ -26,7 +26,7 @@ NCURSES_PATH			= ./files
 NCURSES_OBJECTS_PATH	= ./objects
 
 #------ files ------
-NCURSES_FILES	= n_Curses 
+NCURSES_FILES	= Ncurses.class 
 
 #------ other ------
 NCURSES_OBJ		= $(addprefix $(NCURSES_OBJECTS_PATH)/, $(addsuffix .o, $(NCURSES_FILES)))

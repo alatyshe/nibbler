@@ -273,58 +273,48 @@ void			SmallScreen(Game *g, WINDOW *screen, WINDOW *score) {
 	mvwprintw(screen, 13, 10, "USE ANOTHER MAP SIZE TO CONTINUE");
 }
 
-void			n_curses_visual(Game *g, int game_over)
+extern "C" void			n_curses_visual(Game *g, int game_over)
 {
 
-	std::cout << "FUCK YEAH!!" << std::endl;
-	// static int			haha;
-	// static WINDOW		*screen;
-	// static WINDOW		*score;
-	// int					screen_width;
-	// int					screen_height;
+	// std::cout << "FUCK YEAH!!" << std::endl;
+	static WINDOW		*screen;
+	static WINDOW		*score;
+	int					screen_width;
+	int					screen_height;
 
-	// //	Размер окна на текущий момент:
-	// // int parent_x, parent_y;
-	// getmaxyx(stdscr, screen_height, screen_width);
-	// // wclear(stdscr);
+	//	Размер окна на текущий момент:
+	// int parent_x, parent_y;
+	getmaxyx(stdscr, screen_height, screen_width);
+	// wclear(stdscr);
 
-	// std::cin.sync();
-	// if (!haha)
-	// {
-	// 	haha = 1;
-	// 	Setup(screen, score);
-
-	// 	screen = newwin(g->getHeight() + BORDERS, g->getWidth() * 2 + BORDERS, 0, 0);
-	// 	score = newwin(SCORE_HEIGHT + BORDERS, g->getWidth() * 2 + BORDERS, g->getHeight() + BORDERS, 0);
-	// 	nodelay(screen, TRUE);
-	// 	keypad(screen, TRUE);	//  для восприятия стрелочек
-	// }
-
-	// wclear(screen);
-	// wclear(score);
 	
-	// while (screen_height < g->getHeight() + SCORE_HEIGHT + BORDERS + 2
-	// 	|| screen_width < g->getWidth() * 2 + BORDERS)
-	// {
-	// 	wclear(stdscr);
-	// 	getmaxyx(stdscr, screen_height, screen_width);
-	// 	SmallScreen(g, screen, score);
-	// 	wrefresh(screen);
-	// 	wrefresh(score);
-	// }
-	// // Score(g, score);
-	// // MainMenu(g, screen, score);
-	// // PauseMenu(g, screen, score);
-	// if (game_over)
-	// 	GameOver(g, screen, score);
-	// else {
-	// 	// SmallScreen(g, screen, score);
-	// 	Map(g, screen);
-	// 	Score(g, score);
-	// }
-	// wrefresh(screen);
-	// wrefresh(score);
-	// Input(g, screen);
+
+
+	wclear(screen);
+	wclear(score);
+	
+	while (screen_height < g->getHeight() + SCORE_HEIGHT + BORDERS + 2
+		|| screen_width < g->getWidth() * 2 + BORDERS)
+	{
+		wclear(stdscr);
+		getmaxyx(stdscr, screen_height, screen_width);
+		SmallScreen(g, screen, score);
+		wrefresh(screen);
+		wrefresh(score);
+	}
+	// Score(g, score);
+	// MainMenu(g, screen, score);
+	// PauseMenu(g, screen, score);
+	if (game_over)
+		GameOver(g, screen, score);
+	else {
+		// SmallScreen(g, screen, score);
+		Map(g, screen);
+		Score(g, score);
+	}
+	wrefresh(screen);
+	wrefresh(score);
+	Input(g, screen);
 }
 
 
