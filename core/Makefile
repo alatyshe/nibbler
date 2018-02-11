@@ -22,7 +22,7 @@ CORE_PATH			= ./files
 CORE_OBJECTS_PATH	= ./objects
 
 #------ files ------
-CORE_FILES		= main Game Piece Exception Parser Lexer Player
+CORE_FILES		= main Game Piece Exception Parser Lexer
 
 #------ other ------
 CORE_OBJ		= $(addprefix $(CORE_OBJECTS_PATH)/, $(addsuffix .o, $(CORE_FILES)))

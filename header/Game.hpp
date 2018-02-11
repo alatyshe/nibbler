@@ -42,9 +42,11 @@ extern "C" {
 	# include <dlfcn.h>
 }
 
+
+# include "../ncurses/header/Ncurses.class.hpp"
 # include "../header/Piece.hpp"
 
-extern "C" class Ncruses;
+class Ncurses;
 
 enum Visual{
 	NCURSES,
@@ -54,9 +56,14 @@ enum Visual{
 	QT
 };
 
+class IVisual;
+
 class Game {
 
 protected:
+
+	//	Visual
+	IVisual *_visual;
 	//	Map information
 	char	**_map;
 	int		_width;
@@ -120,5 +127,7 @@ private:
 
 
 extern "C" void		n_curses_visual(Game *g, int);
+
+# include "../header/IVisual.hpp"
 
 #endif

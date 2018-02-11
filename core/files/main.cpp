@@ -43,15 +43,15 @@ int				main(int argc, char **argv) {
 
 
 
-		// if (x < MAX_WIDTH && x > 0 && y > 0 && y < MAX_HEIGHT)
-		// {
-		// 	game = new Game(x, y);
-		// 	std::cout << "YE" << std::endl;
-		// 	game->runGame();
-		// 	std::cout << "YE" << std::endl;
-		// 	return (0);
-		// }
-
+		if (x < MAX_WIDTH && x > 0 && y > 0 && y < MAX_HEIGHT)
+		{
+			game = new Game(x, y);
+			std::cout << "YE" << std::endl;
+			game->runGame();
+			std::cout << "YE" << std::endl;
+			return (0);
+		}
+		
 	}
 	std::cout << "Usage:" << std::endl;
 	std::cout << "\t width height" << std::endl;

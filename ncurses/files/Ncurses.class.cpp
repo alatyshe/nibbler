@@ -1,16 +1,8 @@
-
 #include "../header/Ncurses.class.hpp"
 
 //Constructors and destructor
-
-Ncurses::Ncurses(void) {
-	return ;
-}
-
-Ncurses::~Ncurses(void) {
-	return ;
-}
-
+Ncurses::Ncurses(void) { return ; }
+Ncurses::~Ncurses(void) { return ; }
 Ncurses::Ncurses(Game *g) {
 	setlocale(LC_ALL, "");
 	initscr();				//  ncurses
@@ -37,8 +29,7 @@ Ncurses::Ncurses(Game *g) {
 	nodelay(this->screen, TRUE);	//	
 	keypad(this->screen, TRUE);	//  для восприятия стрелочек
 }
-
-void           Ncurses::Input(Game *g) {
+void			Ncurses::Input(Game *g) {
 	int ch;
 
 	ch = wgetch(this->screen);
@@ -48,23 +39,22 @@ void           Ncurses::Input(Game *g) {
 		exit(0);
 	}
 	if (ch == KEY_LEFT)
-		g->setHeadMoveXY(-1, 0);
+		g->Game::setHeadMoveXY(-1, 0);
 	if (ch == KEY_RIGHT)
-		g->setHeadMoveXY(1, 0);
+		g->Game::setHeadMoveXY(1, 0);
 	if (ch == KEY_UP)
-		g->setHeadMoveXY(0, -1);
+		g->Game::setHeadMoveXY(0, -1);
 	if (ch == KEY_DOWN)
-		g->setHeadMoveXY(0, 1);
+		g->Game::setHeadMoveXY(0, 1);
 }
-
 void			Ncurses::Map(Game *g) {
 	char		**map;
 	int			width;
 	int			height;
 
-	map = g->getMap();
-	width = g->getWidth();
-	height = g->getHeight();
+	map = g->Game::getMap();
+	width = g->Game::getWidth();
+	height = g->Game::getHeight();
 
 	//	sides
 	wattron(this->screen, COLOR_PAIR(7));
@@ -112,17 +102,16 @@ void			Ncurses::Map(Game *g) {
 		wattron(this->screen, COLOR_PAIR(6));
 	}
 }
-
 void			Ncurses::Score(Game *g) {
 	int			total_score;
 	int			level;
 	int			difficult;
 	int			width;
 
-	width = g->getWidth();
-	total_score = g->getScore();
-	level = g->getLevel();
-	difficult = g->getDifficult();
+	width = g->Game::getWidth();
+	total_score = g->Game::getScore();
+	level = g->Game::getLevel();
+	difficult = g->Game::getDifficult();
 
 	//	information
 	wattron(this->score, COLOR_PAIR(6) | WA_BOLD);	// color on
@@ -149,9 +138,9 @@ void			Ncurses::MainMenu(Game *g) {
 	wclear(this->screen);
 	wclear(this->score);
 
-	map = g->getMap();
-	width = g->getWidth();
-	height = g->getHeight();
+	map = g->Game::getMap();
+	width = g->Game::getWidth();
+	height = g->Game::getHeight();
 	//	sides
 	wattron(this->screen, COLOR_PAIR(7));
 	wattron(this->score, COLOR_PAIR(7));
@@ -190,9 +179,9 @@ void			Ncurses::PauseMenu(Game *g) {
 	wclear(this->screen);
 	wclear(this->score);
 
-	map = g->getMap();
-	width = g->getWidth();
-	height = g->getHeight();
+	map = g->Game::getMap();
+	width = g->Game::getWidth();
+	height = g->Game::getHeight();
 
 	//	sides
 	wattron(this->screen, COLOR_PAIR(7));
@@ -229,9 +218,9 @@ void			Ncurses::GameOver(Game *g) {
 	wclear(this->screen);
 	wclear(this->score);
 
-	map = g->getMap();
-	width = g->getWidth();
-	height = g->getHeight();
+	map = g->Game::getMap();
+	width = g->Game::getWidth();
+	height = g->Game::getHeight();
 
 	for (int i = 0; i < (height + SCORE_HEIGHT + BORDERS * 2) ;i++)
 	{
@@ -277,9 +266,9 @@ void			Ncurses::SmallScreen(Game *g) {
 	wclear(this->screen);
 	wclear(score);
 
-	map = g->getMap();
-	width = g->getWidth();
-	height = g->getHeight();
+	map = g->Game::getMap();
+	width = g->Game::getWidth();
+	height = g->Game::getHeight();
 
 	wattron(this->screen, COLOR_PAIR(8) | WA_BOLD);
 	mvwprintw(this->screen, 10, 10, "ERROR!!!");
@@ -290,36 +279,19 @@ void			Ncurses::SmallScreen(Game *g) {
 	wattron(this->screen,COLOR_PAIR(5));
 	mvwprintw(this->screen, 13, 10, "USE ANOTHER MAP SIZE TO CONTINUE");
 }
-
-void			Ncurses::n_curses_visual(Game *g, int game_over)
-{
-
-	// std::cout << "FUCK YEAH!!" << std::endl;
-	static int			haha;
+void			Ncurses::Visual(Game *g, int game_over) {
 	int					screen_width;
 	int					screen_height;
 
 	//	Размер окна на текущий момент:
-	// int parent_x, parent_y;
 	getmaxyx(stdscr, screen_height, screen_width);
 	// wclear(stdscr);
-
-	// if (!haha)
-	// {
-	// 	haha = 1;
-	// 	Setup(screen, score);
-
-	// 	screen = newwin(g->getHeight() + BORDERS, g->getWidth() * 2 + BORDERS, 0, 0);
-	// 	score = newwin(SCORE_HEIGHT + BORDERS, g->getWidth() * 2 + BORDERS, g->getHeight() + BORDERS, 0);
-	// 	nodelay(screen, TRUE);
-	// 	keypad(screen, TRUE);	//  для восприятия стрелочек
-	// }
 
 	wclear(screen);
 	wclear(score);
 	
-	while (screen_height < g->getHeight() + SCORE_HEIGHT + BORDERS + 2
-		|| screen_width < g->getWidth() * 2 + BORDERS)
+	while (screen_height < g->Game::getHeight() + SCORE_HEIGHT + BORDERS + 2
+		|| screen_width < g->Game::getWidth() * 2 + BORDERS)
 	{
 		wclear(stdscr);
 		getmaxyx(stdscr, screen_height, screen_width);
@@ -327,8 +299,10 @@ void			Ncurses::n_curses_visual(Game *g, int game_over)
 		wrefresh(screen);
 		wrefresh(score);
 	}
+
 	// this->MainMenu(g);
 	// this->PauseMenu(g);
+
 	if (game_over)
 		this->GameOver(g);
 	else
@@ -340,3 +314,8 @@ void			Ncurses::n_curses_visual(Game *g, int game_over)
 	wrefresh(this->score);
 	this->Input(g);
 }
+IVisual*		NewVisual(Game *g) { return new Ncurses(g); }
+void			DeleteVisual(IVisual* instance) { delete instance; }
+
+
+

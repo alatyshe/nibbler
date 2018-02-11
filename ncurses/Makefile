@@ -13,10 +13,9 @@ RESET 	= "\033[0;0m"
 
 CXX				= clang++
 # CXXFLAGS		= -std=gnu++14 -Wall -Wextra -Werror
-CPPFLAGS		= -I./header
-NCURSES_FLAGS	= -lncurses
-DYN_LIB_FLAGS	= -shared -fPIC
-LIBRARY			= -L../ -lcore
+
+# CPPFLAGS		= -I../header
+DYN_LIB_FLAGS	= -shared -fPIC -lncurses
 
 NAME			= ../libcurses.dylib
 
@@ -38,7 +37,7 @@ all: $(NAME)
 $(NAME): $(NCURSES_OBJ) 
 	@echo $(CYAN) "\n\tCompiling $@"$(RESET)
 	
-	@$(CXX) $(NCURSES_FLAGS) $(DYN_LIB_FLAGS) $(LIBRARY) -o $(NAME) $^  
+	@$(CXX) $(DYN_LIB_FLAGS) -o $(NAME) $^  
 	
 	@echo $(GREEN) "\tn_curses.so\t\t- has been made\n"$(RESET)
 
