@@ -3,7 +3,7 @@
 //Constructors and destructor
 Ncurses::Ncurses(void) { return ; }
 Ncurses::~Ncurses(void) { return ; }
-Ncurses::Ncurses(Game *g) {
+Ncurses::Ncurses(t_info *info) {
 	setlocale(LC_ALL, "");
 	initscr();				//  ncurses
 
@@ -24,38 +24,74 @@ Ncurses::Ncurses(Game *g) {
 
 	std::cin.sync();
 
-	this->screen = newwin(g->getHeight() + BORDERS, g->getWidth() * 2 + BORDERS, 0, 0);
-	this->score = newwin(SCORE_HEIGHT + BORDERS, g->getWidth() * 2 + BORDERS, g->getHeight() + BORDERS, 0);
+	this->screen = newwin(info->height + BORDERS, info->width * 2 + BORDERS, 0, 0);
+	this->score = newwin(SCORE_HEIGHT + BORDERS, info->width * 2 + BORDERS, info->height + BORDERS, 0);
 	nodelay(this->screen, TRUE);	//	
 	keypad(this->screen, TRUE);	//  для восприятия стрелочек
 }
-void			Ncurses::Input(Game *g) {
+
+void			Ncurses::PrintBorders(t_info *info) {
+	int			width;
+	int			height;
+
+	width = info->width;
+	height = info->height;
+	wattron(this->screen, COLOR_PAIR(7));
+	wattron(this->score, COLOR_PAIR(7));
+	for (int i = 0; i < (height + BORDERS); i++) {
+		mvwprintw(this->screen, i, 0, "|");
+		mvwprintw(this->screen, i, (width * 2) + 1, "|");
+	}
+	for (int i = 0; i < (width * 2 + BORDERS); i++) {
+		mvwprintw(this->screen, 0, i, "_");
+	}
+	for (int i = 0; i < (SCORE_HEIGHT + BORDERS); i++) {
+		mvwprintw(this->score, i, 0, "|");
+		mvwprintw(this->score, i, (width * 2) + 1, "|");
+	}
+	for (int i = 0; i < (width * 2 + BORDERS); i++) {
+		mvwprintw(this->score, SCORE_HEIGHT + 1, i, "-");
+	}
+}
+
+int				Ncurses::ReadInput() {
 	int ch;
 
 	ch = wgetch(this->screen);
-	if (ch == 'q')
-	{
-		endwin();
-		exit(0);
-	}
-	if (ch == KEY_LEFT)
-		g->Game::setHeadMoveXY(-1, 0);
-	if (ch == KEY_RIGHT)
-		g->Game::setHeadMoveXY(1, 0);
+	std::cout << " HERE : " << ch << std::endl;
+	if (ch == 27)
+		return MENU;
+	if (ch == 10)
+		return RETURN;
+
 	if (ch == KEY_UP)
-		g->Game::setHeadMoveXY(0, -1);
+		return UP;
+	if (ch == KEY_RIGHT)
+		return RIGHT;
+	if (ch == KEY_LEFT)
+		return LEFT;
 	if (ch == KEY_DOWN)
-		g->Game::setHeadMoveXY(0, 1);
+		return DOWN;
+		
+	if (ch == 50)
+		return NCURSES;
+	if (ch == 51)
+		return QT;
+	if (ch == 52)
+		return SDL2;
+	return (0);
 }
-void			Ncurses::Map(Game *g) {
+
+void			Ncurses::Map(t_info *info) {
 	char		**map;
 	int			width;
 	int			height;
 
-	map = g->Game::getMap();
-	width = g->Game::getWidth();
-	height = g->Game::getHeight();
+	map = info->map;
+	width = info->width;
+	height = info->height;
 
+	wclear(screen);
 	//	sides
 	wattron(this->screen, COLOR_PAIR(7));
 	for (int i = 0; i < (height + BORDERS); i++) {
@@ -101,24 +137,26 @@ void			Ncurses::Map(Game *g) {
 		}
 		wattron(this->screen, COLOR_PAIR(6));
 	}
+	wrefresh(this->screen);
 }
-void			Ncurses::Score(Game *g) {
+void			Ncurses::Score(t_info *info) {
 	int			total_score;
 	int			level;
 	int			difficult;
 	int			width;
 
-	width = g->Game::getWidth();
-	total_score = g->Game::getScore();
-	level = g->Game::getLevel();
-	difficult = g->Game::getDifficult();
+	width = info->width;
+	total_score = info->score;
+	level = info->level;
+	difficult = info->difficult;
 
+	wclear(score);
 	//	information
 	wattron(this->score, COLOR_PAIR(6) | WA_BOLD);	// color on
 	mvwprintw(this->score, 1, 3,"Score : %d", total_score);
 	mvwprintw(this->score, 2, 3,"Level : %d", level);
 	mvwprintw(this->score, 3, 3,"Difficult : %d", difficult);
-	mvwprintw(this->score, 1, 40, "LIVES : 💖 💖 💖 ");
+	// mvwprintw(this->score, 1, 40, "LIVES : 💖 💖 💖 ");
 	wattroff(this->score, COLOR_PAIR(6) | WA_BOLD);	// color off
 	//	sides
 	wattron(this->score, COLOR_PAIR(7));
@@ -129,98 +167,223 @@ void			Ncurses::Score(Game *g) {
 	for (int i = 0; i < (width * 2 + BORDERS); i++) {
 		mvwprintw(this->score, SCORE_HEIGHT + 1, i, "-");
 	}
+	wrefresh(this->score);
 }
-void			Ncurses::MainMenu(Game *g) {
-	char		**map;
+
+
+void			Ncurses::MainMenu(t_info *info) {
+	int			key;
+	int			cursor_position;
+
+	key = 0;
+	cursor_position = 1;
+	while (key != RETURN)
+	{
+		wclear(this->screen);
+		wclear(this->score);
+
+		this->PrintBorders(info);
+
+		wattron(this->screen, COLOR_PAIR(1) | WA_BOLD);
+		mvwprintw(this->screen, (info->height + SCORE_HEIGHT) / 2 - 2, info->width / 2, "MENU");
+		cursor_position == 1 ? wattron(this->screen,COLOR_PAIR(2)) : wattron(this->screen,COLOR_PAIR(5));
+		mvwprintw(this->screen, (info->height + SCORE_HEIGHT) / 2, info->width / 2, "SINGLE GAME");
+		cursor_position == 2 ? wattron(this->screen,COLOR_PAIR(2)) : wattron(this->screen,COLOR_PAIR(5));
+		mvwprintw(this->screen, (info->height + SCORE_HEIGHT) / 2 + 1, info->width / 2, "PLAYER VS PLAYER");
+		cursor_position == 3 ? wattron(this->screen,COLOR_PAIR(2)) : wattron(this->screen,COLOR_PAIR(5));
+		mvwprintw(this->screen, (info->height + SCORE_HEIGHT) / 2 + 2, info->width / 2, "EXIT");
+		
+		wrefresh(this->screen);
+		wrefresh(this->score);
+
+		key = this->ReadInput();
+
+		if (key == 1 && cursor_position > 1)
+			cursor_position--;
+		else if (key == 4 && cursor_position < 3)
+			cursor_position++;
+		std::this_thread::sleep_for(std::chrono::milliseconds(50));
+	}
+
+	if (cursor_position == 1)
+		info->status = PLAY;
+	else if (cursor_position == 2)
+		;// info->status = ;
+	else
+		info->status = EXIT;
+}
+void			Ncurses::PauseMenu(t_info *info) {
+	int			key;
+	int			cursor_position;
+
+	key = 0;
+	cursor_position = 1;
+	while (key != RETURN)
+	{
+		wclear(this->screen);
+		wclear(this->score);
+
+		this->PrintBorders(info);
+
+		wattron(this->screen, COLOR_PAIR(1) | WA_BOLD);
+		mvwprintw(this->screen, (info->height + SCORE_HEIGHT) / 2 - 2, info->width / 2, "PAUSE");
+		cursor_position == 1 ? wattron(this->screen,COLOR_PAIR(2)) : wattron(this->screen,COLOR_PAIR(5));
+		mvwprintw(this->screen, (info->height + SCORE_HEIGHT) / 2, info->width / 2, "CONTINUE");
+		cursor_position == 2 ? wattron(this->screen,COLOR_PAIR(2)) : wattron(this->screen,COLOR_PAIR(5));
+		mvwprintw(this->screen, (info->height + SCORE_HEIGHT) / 2 + 1, info->width / 2, "MAIN MENU");
+
+		wrefresh(this->screen);
+		wrefresh(this->score);
+
+		key = this->ReadInput();
+		if (key == 1 && cursor_position > 1)
+			cursor_position--;
+		else if (key == 4 && cursor_position < 2)
+			cursor_position++;
+		std::this_thread::sleep_for(std::chrono::milliseconds(50));
+	}
+
+	if (cursor_position == 1)
+		info->status = PLAY;
+	else if (cursor_position == 2)
+		info->status = MAIN_MENU;
+}
+void			Ncurses::GameOverMenu(t_info *info) {
+	int			key;
+	int			cursor_position;
+
+	key = 0;
+	cursor_position = 1;
+	while (key != RETURN)
+	{
+		wclear(this->screen);
+		wclear(this->score);
+		
+		this->PrintBorders(info);
+
+		wattron(this->screen, COLOR_PAIR(8) | WA_BOLD);
+		mvwprintw(this->screen, (info->height + SCORE_HEIGHT) / 2 - 2, info->width / 2, "GAME OVER");
+		cursor_position == 1 ? wattron(this->screen,COLOR_PAIR(2)) : wattron(this->screen,COLOR_PAIR(5));
+		mvwprintw(this->screen, (info->height + SCORE_HEIGHT) / 2, info->width / 2, "RESET");
+		cursor_position == 2 ? wattron(this->screen,COLOR_PAIR(2)) : wattron(this->screen,COLOR_PAIR(5));
+		mvwprintw(this->screen, (info->height + SCORE_HEIGHT) / 2 + 1, info->width / 2, "MAIN MENU");
+
+		wrefresh(this->screen);
+		wrefresh(this->score);
+
+		key = this->ReadInput();
+
+		if (key == 1 && cursor_position > 1)
+			cursor_position--;
+		else if (key == 4 && cursor_position < 2)
+			cursor_position++;
+		std::this_thread::sleep_for(std::chrono::milliseconds(50));
+	}
+
+	if (cursor_position == 1)
+		info->status = PLAY;
+	else if (cursor_position == 2)
+		info->status = MAIN_MENU;
+}
+
+
+void			Ncurses::SmallScreen(t_info *info) {
+	int					screen_width;
+	int					screen_height;
+
+	getmaxyx(stdscr, screen_height, screen_width);
+	if (screen_height < info->height + SCORE_HEIGHT + BORDERS + 2
+		|| screen_width < info->width * 2 + BORDERS)
+	{
+		wclear(this->screen);
+		wclear(score);
+
+		wattron(this->screen, COLOR_PAIR(8) | WA_BOLD);
+		mvwprintw(this->screen, 10, 10, "ERROR!!!");
+		wattron(this->screen,COLOR_PAIR(5));
+		mvwprintw(this->screen, 12, 10, "SCREEN TO SMALL. RESIZE OR");
+		wattron(this->screen,COLOR_PAIR(5));
+		mvwprintw(this->screen, 13, 10, "USE ANOTHER MAP SIZE TO CONTINUE");
+
+		wrefresh(screen);
+		wrefresh(score);
+		std::this_thread::sleep_for(std::chrono::milliseconds(100));
+		info->status = SMALL_SCREEN;
+	}
+	else
+		info->status = PLAY;	
+}
+
+
+int				Ncurses::Visual(t_info *info) {
+
+	int					key;
+
+	this->SmallScreen(info);
+
+	//	Читаем клавиши
+	key = this->ReadInput();
+	if (key == MENU)
+		this->PauseMenu(info);
+	else if (info->status == PLAY)
+	{
+		this->Map(info);
+		this->Score(info);
+	}
+	else if (info->status == GAME_OVER)
+	{
+		// this->GameOverScreen(info);
+		this->GameOverMenu(info);
+	}
+	else if (info->status == MAIN_MENU)
+		this->MainMenu(info);
+
+	std::this_thread::sleep_for(std::chrono::milliseconds(260 / 3));
+	return (key);
+}
+
+IVisual*		NewVisual(t_info *info) { return new Ncurses(info); }
+void			DeleteVisual(IVisual* instance){
+	endwin();
+	delete instance;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+void			Ncurses::GameOverScreen(t_info *info) {
 	int			width;
 	int			height;
 
 	wclear(this->screen);
 	wclear(this->score);
 
-	map = g->Game::getMap();
-	width = g->Game::getWidth();
-	height = g->Game::getHeight();
-	//	sides
-	wattron(this->screen, COLOR_PAIR(7));
-	wattron(this->score, COLOR_PAIR(7));
-	for (int i = 0; i < (height + BORDERS); i++) {
-		mvwprintw(this->screen, i, 0, "|");
-		mvwprintw(this->screen, i, (width * 2) + 1, "|");
-	}
-	for (int i = 0; i < (width * 2 + BORDERS); i++) {
-		mvwprintw(this->screen, 0, i, "_");
-	}
-	for (int i = 0; i < (SCORE_HEIGHT + BORDERS); i++) {
-		mvwprintw(this->score, i, 0, "|");
-		mvwprintw(this->score, i, (width * 2) + 1, "|");
-	}
-	for (int i = 0; i < (width * 2 + BORDERS); i++) {
-		mvwprintw(this->score, SCORE_HEIGHT + 1, i, "-");
-	}
-
-	wattron(this->screen, COLOR_PAIR(1) | WA_BOLD);
-	mvwprintw(this->screen, (height + SCORE_HEIGHT) / 2 - 2, width / 2, "MENU");
-	
-	wattron(this->screen,COLOR_PAIR(2));
-	mvwprintw(this->screen, (height + SCORE_HEIGHT) / 2, width / 2, "SINGLE GAME");
-
-	wattron(this->screen,COLOR_PAIR(5));
-	mvwprintw(this->screen, (height + SCORE_HEIGHT) / 2 + 1, width / 2, "PLAYER VS PLAYER");
-
-	wattron(this->screen, COLOR_PAIR(5));
-	mvwprintw(this->screen, (height + SCORE_HEIGHT) / 2 + 2, width / 2, "EXIT");
-}
-void			Ncurses::PauseMenu(Game *g) {
-	char		**map;
-	int			width;
-	int			height;
-
-	wclear(this->screen);
-	wclear(this->score);
-
-	map = g->Game::getMap();
-	width = g->Game::getWidth();
-	height = g->Game::getHeight();
-
-	//	sides
-	wattron(this->screen, COLOR_PAIR(7));
-	wattron(this->score, COLOR_PAIR(7));
-	for (int i = 0; i < (height + BORDERS); i++) {
-		mvwprintw(this->screen, i, 0, "|");
-		mvwprintw(this->screen, i, (width * 2) + 1, "|");
-	}
-	for (int i = 0; i < (width * 2 + BORDERS); i++) {
-		mvwprintw(this->screen, 0, i, "_");
-	}
-	for (int i = 0; i < (SCORE_HEIGHT + BORDERS); i++) {
-		mvwprintw(this->score, i, 0, "|");
-		mvwprintw(this->score, i, (width * 2) + 1, "|");
-	}
-	for (int i = 0; i < (width * 2 + BORDERS); i++) {
-		mvwprintw(this->score, SCORE_HEIGHT + 1, i, "-");
-	}
-
-	wattron(this->screen, COLOR_PAIR(1) | WA_BOLD);
-	mvwprintw(this->screen, (height + SCORE_HEIGHT) / 2 - 2, width / 2, "PAUSE");
-	
-	wattron(this->screen,COLOR_PAIR(2));
-	mvwprintw(this->screen, (height + SCORE_HEIGHT) / 2, width / 2, "CONTINUE");
-
-	wattron(this->screen,COLOR_PAIR(5));
-	mvwprintw(this->screen, (height + SCORE_HEIGHT) / 2 + 1, width / 2, "MAIN MENU");
-}
-void			Ncurses::GameOver(Game *g) {
-	char		**map;
-	int			width;
-	int			height;
-
-	wclear(this->screen);
-	wclear(this->score);
-
-	map = g->Game::getMap();
-	width = g->Game::getWidth();
-	height = g->Game::getHeight();
+	width = info->width;
+	height = info->height;
 
 	for (int i = 0; i < (height + SCORE_HEIGHT + BORDERS * 2) ;i++)
 	{
@@ -244,13 +407,16 @@ void			Ncurses::GameOver(Game *g) {
 			mvwprintw(this->score, SCORE_HEIGHT + 1, i, "-");
 		}
 
-		if (i / 2 > 1)
+		if (i / 2 - 2 > 1)
 		{
 			wattron(this->screen, COLOR_PAIR(8) | WA_BOLD);
-			mvwprintw(this->screen, i / 2 - 1, width / 2, "GAME OVER");
+			mvwprintw(this->screen, i / 2 - 3, width / 2, "GAME OVER");
 		}
-		wattron(this->screen,COLOR_PAIR(4));
-		mvwprintw(this->screen, i / 2 + 1, width / 2, "SCORE : %d", g->getScore());
+		if (i / 2 > 1)
+		{
+			wattron(this->screen,COLOR_PAIR(4));
+			mvwprintw(this->screen, i / 2 - 1, width / 2, "SCORE : %d", info->score);
+		}
 
 		wrefresh(this->screen);
 		wrefresh(this->score);
@@ -258,64 +424,3 @@ void			Ncurses::GameOver(Game *g) {
 	}
 	std::this_thread::sleep_for(std::chrono::milliseconds(2000));
 }
-void			Ncurses::SmallScreen(Game *g) {
-	char		**map;
-	int			width;
-	int			height;
-
-	wclear(this->screen);
-	wclear(score);
-
-	map = g->Game::getMap();
-	width = g->Game::getWidth();
-	height = g->Game::getHeight();
-
-	wattron(this->screen, COLOR_PAIR(8) | WA_BOLD);
-	mvwprintw(this->screen, 10, 10, "ERROR!!!");
-	
-	wattron(this->screen,COLOR_PAIR(5));
-	mvwprintw(this->screen, 12, 10, "SCREEN TO SMALL. RESIZE OR");
-
-	wattron(this->screen,COLOR_PAIR(5));
-	mvwprintw(this->screen, 13, 10, "USE ANOTHER MAP SIZE TO CONTINUE");
-}
-void			Ncurses::Visual(Game *g, int game_over) {
-	int					screen_width;
-	int					screen_height;
-
-	//	Размер окна на текущий момент:
-	getmaxyx(stdscr, screen_height, screen_width);
-	// wclear(stdscr);
-
-	wclear(screen);
-	wclear(score);
-	
-	while (screen_height < g->Game::getHeight() + SCORE_HEIGHT + BORDERS + 2
-		|| screen_width < g->Game::getWidth() * 2 + BORDERS)
-	{
-		wclear(stdscr);
-		getmaxyx(stdscr, screen_height, screen_width);
-		this->SmallScreen(g);
-		wrefresh(screen);
-		wrefresh(score);
-	}
-
-	// this->MainMenu(g);
-	// this->PauseMenu(g);
-
-	if (game_over)
-		this->GameOver(g);
-	else
-	{
-		this->Map(g);
-		this->Score(g);
-	}
-	wrefresh(this->screen);
-	wrefresh(this->score);
-	this->Input(g);
-}
-IVisual*		NewVisual(Game *g) { return new Ncurses(g); }
-void			DeleteVisual(IVisual* instance) { delete instance; }
-
-
-

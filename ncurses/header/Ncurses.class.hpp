@@ -3,37 +3,39 @@
 
 # include <ncurses.h>
 
-# include "../../header/Game.hpp"
 # include "../../header/IVisual.hpp"
 
 class Game;
 class IVisual;
 
-extern "C" class Ncurses: public IVisual {
+class Ncurses: public IVisual {
 public:
 	Ncurses();
 	~Ncurses();
-	Ncurses(Game *g);
+	Ncurses(t_info *info);
 
+	void	PrintBorders(t_info *info);
 	//	ReadInput	
-	void	Input(Game *g);
+	int		ReadInput();
 	//	Display Game
-	void	Map(Game *g);
-	void	Score(Game *g);
-	//	Display	Other
-	void	MainMenu(Game *g);
-	void	PauseMenu(Game *g);
-	void	GameOver(Game *g);
-	void	SmallScreen(Game *g);
-
-	void	Visual(Game *g, int game_over);
+	void	Map(t_info *info);
+	void	Score(t_info *info);
+	//	Display	Menu
+	void	MainMenu(t_info *info);
+	void	PauseMenu(t_info *info);
+	void	GameOverMenu(t_info *info);
+	//	Screens
+	void	GameOverScreen(t_info *info);
+	void	SmallScreen(t_info *info);
+	//	Main func
+	int		Visual(t_info *info);
 
 private:
 	WINDOW	*screen;
 	WINDOW	*score;
 };
 
-extern "C" IVisual* NewVisual(Game *g);
+extern "C" IVisual* NewVisual(t_info *info);
 extern "C" void DeleteVisual(IVisual* instance);
 
 #endif

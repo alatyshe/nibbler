@@ -8,21 +8,20 @@ class Game;
 class IVisual {
 
 public:
-	
-
-
 	//	ReadInput
-	virtual void	Input(Game *g) = 0;
+	virtual int		ReadInput() = 0;
 	//	Display Game
-	virtual void	Map(Game *g) = 0;
-	virtual void	Score(Game *g) = 0;
-	//	Display	Other
-	virtual void	MainMenu(Game *g) = 0;
-	virtual void	PauseMenu(Game *g) = 0;
-	virtual void	GameOver(Game *g) = 0;
-	virtual void	SmallScreen(Game *g) = 0;
+	virtual void	Map(t_info *info) = 0;
+	virtual void	Score(t_info *info) = 0;
+	//	Display	Menu
+	virtual void	MainMenu(t_info *info) = 0;
+	virtual void	PauseMenu(t_info *info) = 0;
+	virtual void	GameOverMenu(t_info *info) = 0;
+	//	Screens
+	virtual void	GameOverScreen(t_info *info) = 0;
+	virtual void	SmallScreen(t_info *info) = 0;
 	//	MainVisual
-	virtual	void	Visual(Game *g, int game_over) = 0;
+	virtual	int		Visual(t_info *info) = 0;
 
 	virtual ~IVisual( void ) { ; };
 };

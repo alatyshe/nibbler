@@ -25,7 +25,7 @@ RESET 	= "\033[0;0m"
 #-------------------
 
 CXX				= clang++
-# CXXFLAGS		= -std=gnu++14 -Wall -Wextra -Werror
+CXXFLAGS		= -std=c++11 -Wall -Wextra -Werror
 
 NAME			= ./nibbler
 
@@ -49,9 +49,9 @@ $(NAME): $(CORE_OBJ)
 	
 	@make -C ncurses/
 	
-	# @$(CXX) -lcurses -ldl -o $@ $^
+	@$(CXX) -lcurses -ldl -o $@ $^
 
-	# @echo $(GREEN) "\tnibbler\t\t- has been made\n"$(RESET)
+	@echo $(GREEN) "\tnibbler\t\t- has been made\n"$(RESET)
 
 $(CORE_OBJECTS_PATH)/%.o: $(CORE_PATH)/%.cpp
 	@echo $(PURPLE) "\tCompiling $<"$(RESET)

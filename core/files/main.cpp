@@ -22,10 +22,6 @@ int				main(int argc, char **argv) {
 		// return 0;
 
 
-
-
-
-
 		// const char *	dlsym_error;
 		// void *			symbol;
 
@@ -40,15 +36,11 @@ int				main(int argc, char **argv) {
 		// dlsym_error = dlerror();
 
 
-
-
-
-		if (x < MAX_WIDTH && x > 0 && y > 0 && y < MAX_HEIGHT)
+		if (x < MAX_WIDTH && x > MIN_WIDTH 
+			&& y > MIN_HEIGHT && y < MAX_HEIGHT)
 		{
 			game = new Game(x, y);
-			std::cout << "YE" << std::endl;
 			game->runGame();
-			std::cout << "YE" << std::endl;
 			return (0);
 		}
 		

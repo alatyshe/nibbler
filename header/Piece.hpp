@@ -10,23 +10,17 @@ class Piece {
 	int		_y;
 
 public:
-	
-//	Construct
+	//	Construct
 	Piece();
 	Piece(int x, int y);
-	
-// Destruct
+	// Destruct
 	~Piece();
-
-//	Getters
+	//	Getters
 	int				GetX() const;
 	int				GetY() const;
-	int				GetType() const;
-
-//	Setters
+	//	Setters
 	void			SetX(int x);
 	void			SetY(int y);
-	// void			MovePiece(int x, int y);
 
 private:
 	Piece	&operator=(const Piece& src);
@@ -34,8 +28,6 @@ private:
 
 };
 
-
 std::ostream&	operator<<(std::ostream& os, const Piece& df);
-
 
 #endif

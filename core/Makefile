@@ -11,8 +11,8 @@ WHITE 	= "\033[1;37m"
 RESET 	= "\033[0;0m"
 #-------------------
 
-CXX				= clang++
-# CXXFLAGS		= -std=gnu++14 -Wall -Wextra -Werror
+CXX				= g++
+CXXFLAGS		= -std=gnu++14 -Wall -Wextra -Werror
 
 NAME			= ../libcore.a
 
