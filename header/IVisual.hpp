@@ -19,7 +19,7 @@ public:
 	virtual void	GameOverMenu(t_info *info) = 0;
 	//	Screens
 	virtual void	GameOverScreen(t_info *info) = 0;
-	virtual void	SmallScreen(t_info *info) = 0;
+	virtual int		SmallScreen(t_info *info) = 0;
 	//	MainVisual
 	virtual	int		Visual(t_info *info) = 0;
 

@@ -48,8 +48,8 @@
 # define QT					6
 # define SDL2				7
 
-# define MENU				8
-# define RETURN				9
+# define ESC				8
+# define ENTER				9
 // # define SFML				6
 // # define GLFW				7
 
@@ -99,15 +99,13 @@ protected:
 	IVisual *_visual;		//	сам движок визуализации
 	t_info	*_info;			//	вся инфа о карте и прочего для отображения внизу
 
-
+	// INFO FOR SNAKE
 	//	Next coord for piece(snake body). Can have any integer
 	int		_next_x;
 	int 	_next_y;
-
 	//	Where move snake head at the moment(). Can have -1 0 1
 	int		_head_move_x;
 	int		_head_move_y;
-
 	//	Snake
 	std::vector<Piece *>	_snake;
 

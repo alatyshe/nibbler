@@ -26,7 +26,7 @@ public:
 	void	GameOverMenu(t_info *info);
 	//	Screens
 	void	GameOverScreen(t_info *info);
-	void	SmallScreen(t_info *info);
+	int		SmallScreen(t_info *info);
 	//	Main func
 	int		Visual(t_info *info);
 

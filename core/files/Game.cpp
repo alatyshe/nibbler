@@ -15,7 +15,6 @@ Game::Game(int width, int height) {
 	this->_info->difficult = 1;
 	this->_info->library = NCURSES;
 	this->_info->status = MAIN_MENU;
-	this->createMap();
 
 	//	Type of visualisation
 	this->_visual = NULL;
@@ -76,9 +75,10 @@ void		Game::createFruit() {
 
 	while (true)
 	{
-		x = rand() % this->_info->width;
-		y = rand() % this->_info->height;
-		if (this->_info->map[y][x] != WALL)
+		x = rand() % (this->_info->width  - 1);
+		y = rand() % (this->_info->height - 1);
+		if (this->_info->map[y][x] != WALL
+			&& x > 1 && y > 1)
 		{
 			this->_info->map[y][x] = APPLE;
 			break;
@@ -239,19 +239,17 @@ void		Game::runGame()
 	while(true)
 	{
 		putSnakeOnMap();
-		if (this->_info->status == GAME_OVER)
+		if (this->_info->status == GAME_OVER || this->_info->status == MAIN_MENU)
 			this->createMap();
-		if (this->_info->status == MAIN_MENU)
-			this->createMap();
-		
+
+
 		key_input = this->_visual->Visual(this->_info);
 
 		this->keyParser(key_input);
 
+		cleanMapFromSnake();
+
 		if (this->_info->status == PLAY)
-		{
-			cleanMapFromSnake();
 			moveSnakeBody();
-		}
 	}
 }

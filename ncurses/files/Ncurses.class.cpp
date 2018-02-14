@@ -58,11 +58,11 @@ int				Ncurses::ReadInput() {
 	int ch;
 
 	ch = wgetch(this->screen);
-	std::cout << " HERE : " << ch << std::endl;
+	// std::cout << " HERE : " << ch << std::endl;
 	if (ch == 27)
-		return MENU;
+		return ESC;
 	if (ch == 10)
-		return RETURN;
+		return ENTER;
 
 	if (ch == KEY_UP)
 		return UP;
@@ -103,33 +103,22 @@ void			Ncurses::Map(t_info *info) {
 		mvwprintw(this->screen, height + 1, i, "-");
 	}
 	//	map
-	for (int y = 0; y < height; y++)
-	{
-		for (int x = 0; x < width; x++)
-		{
-			if (map[y][x] == SNAKE_BODY)
-			{
+	for (int y = 0; y < height; y++) {
+		for (int x = 0; x < width; x++) {
+			if (map[y][x] == SNAKE_BODY) {
 				wattron(this->screen, COLOR_PAIR(1));
 				mvwprintw(this->screen, y + 1, x * 2 + 1, "◎");
-			}
-			else if (map[y][x] == SNAKE_HEAD)
-			{
+			} else if (map[y][x] == SNAKE_HEAD) {
 				wattron(this->screen, COLOR_PAIR(2));
 				mvwprintw(this->screen, y + 1 , x * 2 + 1, "🌞");
-			}
-			else if (map[y][x] == WALL)
-			{
+			} else if (map[y][x] == WALL) {
 				wattron(this->screen, COLOR_PAIR(5));
 				mvwprintw(this->screen, y + 1, x * 2 + 1, "💣");
-			}
-			else if (map[y][x] == APPLE)
-			{
+			} else if (map[y][x] == APPLE) {
 				wattron(this->screen, COLOR_PAIR(4) | WA_BOLD);
 				// 🍒🍑🍐🍏🍊🍇🍅🍒💋🍪🔮🚪🏮©¤
 				mvwprintw(this->screen, y + 1, x * 2 + 1, "🍒");
-			}
-			else
-			{
+			} else {
 				wattron(this->screen, COLOR_PAIR(5));
 				mvwprintw(this->screen, y + 1, x * 2 + 1, ".");
 			}
@@ -177,7 +166,7 @@ void			Ncurses::MainMenu(t_info *info) {
 
 	key = 0;
 	cursor_position = 1;
-	while (key != RETURN)
+	while (key != ENTER)
 	{
 		wclear(this->screen);
 		wclear(this->score);
@@ -218,7 +207,7 @@ void			Ncurses::PauseMenu(t_info *info) {
 
 	key = 0;
 	cursor_position = 1;
-	while (key != RETURN)
+	while (key != ENTER)
 	{
 		wclear(this->screen);
 		wclear(this->score);
@@ -254,7 +243,7 @@ void			Ncurses::GameOverMenu(t_info *info) {
 
 	key = 0;
 	cursor_position = 1;
-	while (key != RETURN)
+	while (key != ENTER)
 	{
 		wclear(this->screen);
 		wclear(this->score);
@@ -287,7 +276,7 @@ void			Ncurses::GameOverMenu(t_info *info) {
 }
 
 
-void			Ncurses::SmallScreen(t_info *info) {
+int				Ncurses::SmallScreen(t_info *info) {
 	int					screen_width;
 	int					screen_height;
 
@@ -308,10 +297,10 @@ void			Ncurses::SmallScreen(t_info *info) {
 		wrefresh(screen);
 		wrefresh(score);
 		std::this_thread::sleep_for(std::chrono::milliseconds(100));
-		info->status = SMALL_SCREEN;
+		return (1);
 	}
 	else
-		info->status = PLAY;	
+		return(0);
 }
 
 
@@ -319,26 +308,27 @@ int				Ncurses::Visual(t_info *info) {
 
 	int					key;
 
-	this->SmallScreen(info);
-
-	//	Читаем клавиши
-	key = this->ReadInput();
-	if (key == MENU)
-		this->PauseMenu(info);
-	else if (info->status == PLAY)
+	if (!this->SmallScreen(info))
 	{
-		this->Map(info);
-		this->Score(info);
-	}
-	else if (info->status == GAME_OVER)
-	{
-		// this->GameOverScreen(info);
-		this->GameOverMenu(info);
-	}
-	else if (info->status == MAIN_MENU)
-		this->MainMenu(info);
+		//	Читаем клавиши
+		key = this->ReadInput();
+		if (key == ESC)
+			info->status = PAUSE_MENU;
 
-	std::this_thread::sleep_for(std::chrono::milliseconds(260 / 3));
+
+		if (info->status == PAUSE_MENU) {
+			this->PauseMenu(info);
+		} else if (info->status == GAME_OVER) {
+			this->GameOverScreen(info);
+			this->GameOverMenu(info);
+		} else if (info->status == MAIN_MENU) {
+			this->MainMenu(info);
+		} else if (info->status == PLAY) {
+			this->Map(info);
+			this->Score(info);
+		}
+	}
+	std::this_thread::sleep_for(std::chrono::milliseconds(260 / 2));
 	return (key);
 }
 
@@ -407,13 +397,11 @@ void			Ncurses::GameOverScreen(t_info *info) {
 			mvwprintw(this->score, SCORE_HEIGHT + 1, i, "-");
 		}
 
-		if (i / 2 - 2 > 1)
-		{
+		if (i / 2 - 2 > 1) {
 			wattron(this->screen, COLOR_PAIR(8) | WA_BOLD);
 			mvwprintw(this->screen, i / 2 - 3, width / 2, "GAME OVER");
 		}
-		if (i / 2 > 1)
-		{
+		if (i / 2 > 1) {
 			wattron(this->screen,COLOR_PAIR(4));
 			mvwprintw(this->screen, i / 2 - 1, width / 2, "SCORE : %d", info->score);
 		}
