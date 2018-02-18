@@ -408,7 +408,7 @@ void			Ncurses::GameOverScreen(t_info *info) {
 
 		wrefresh(this->screen);
 		wrefresh(this->score);
-		std::this_thread::sleep_for(std::chrono::milliseconds(20));
+		std::this_thread::sleep_for(std::chrono::milliseconds(25));
 	}
 	std::this_thread::sleep_for(std::chrono::milliseconds(2000));
 }
