@@ -40,6 +40,7 @@ void		Game::createSnake() {
 	this->_head_move_x = 1; // 1(right) or 0(middle) or -1(left)
 	this->_head_move_y = 0; // 1(up) or 0(middle) or -1(down)
 }
+
 void		Game::createMap() {
 	int 	total_walls;
 	int		y;
@@ -69,6 +70,7 @@ void		Game::createMap() {
 	this->createFruit();
 	this->createSnake();
 }
+
 void		Game::createFruit() {
 	int		y;
 	int		x;
@@ -85,7 +87,6 @@ void		Game::createFruit() {
 		}
 	}
 }
-
 
 void 		Game::putSnakeOnMap() {
 	int			x;
@@ -126,6 +127,7 @@ void 		Game::putSnakeOnMap() {
 		this->_snake.push_back(new Piece());
 	}
 }
+
 void 		Game::moveSnakeBody() {
 	int			x;
 	int			y;
@@ -152,6 +154,7 @@ void 		Game::moveSnakeBody() {
 	this->_next_x = 0;
 	this->_next_y = 0;
 }
+
 void 		Game::cleanMapFromSnake() {
 	for (int i = 0; i < this->_info->height; i++)
 	{
@@ -163,7 +166,6 @@ void 		Game::cleanMapFromSnake() {
 		}
 	}
 }
-
 
 void		Game::keyParser(int key) {
 	if (key == LEFT || key == RIGHT)

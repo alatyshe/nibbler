@@ -121,8 +121,9 @@ void			Ncurses::Map(t_info *info) {
 			} else {
 				wattron(this->screen, COLOR_PAIR(5));
 				mvwprintw(this->screen, y + 1, x * 2 + 1, ".");
+				mvwprintw(this->screen, y + 1, x * 2 + 2, " ");
 			}
-			mvwprintw(this->screen, y + 1, x * 2 + 2, " ");
+			
 		}
 		wattron(this->screen, COLOR_PAIR(6));
 	}
