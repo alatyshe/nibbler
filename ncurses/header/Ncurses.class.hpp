@@ -3,7 +3,7 @@
 
 # include <ncurses.h>
 
-# include "../../header/IVisual.hpp"
+# include "../../abstract/IVisual.hpp"
 
 class Game;
 class IVisual;
@@ -25,7 +25,6 @@ public:
 	void	PauseMenu(t_info *info);
 	void	GameOverMenu(t_info *info);
 	//	Screens
-	void	GameOverScreen(t_info *info);
 	int		SmallScreen(t_info *info);
 	//	Main func
 	int		Visual(t_info *info);
@@ -36,6 +35,6 @@ private:
 };
 
 extern "C" IVisual* NewVisual(t_info *info);
-extern "C" void DeleteVisual(IVisual* instance);
+extern "C" void 	DeleteVisual(IVisual* instance);
 
 #endif

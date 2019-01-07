@@ -1,8 +1,29 @@
 #include "../header/Ncurses.class.hpp"
 
+IVisual*		NewVisual(t_info *info) { 
+	// Создаем экземпляр нашей визуализации и возвращаем
+	return new Ncurses(info); 
+}
+
+void			DeleteVisual(IVisual* instance){
+	// закрываем все что связанно с визуализацией и удаляем экземпляр
+	delete instance;
+}
+
+
+
 //Constructors and destructor
 Ncurses::Ncurses(void) { return ; }
-Ncurses::~Ncurses(void) { return ; }
+
+Ncurses::~Ncurses(void) {
+	refresh();
+	wrefresh(this->screen);
+	wrefresh(this->score);
+	delwin(this->screen);
+	delwin(this->score);
+	endwin();
+}
+
 Ncurses::Ncurses(t_info *info) {
 	setlocale(LC_ALL, "");
 	initscr();				//  ncurses
@@ -27,94 +48,57 @@ Ncurses::Ncurses(t_info *info) {
 	this->screen = newwin(info->height + BORDERS, info->width * 2 + BORDERS, 0, 0);
 	this->score = newwin(SCORE_HEIGHT + BORDERS, info->width * 2 + BORDERS, info->height + BORDERS, 0);
 	nodelay(this->screen, TRUE);	//	
-	keypad(this->screen, TRUE);	//  для восприятия стрелочек
+	keypad(this->screen, TRUE);		//  для восприятия стрелочек
 }
 
 void			Ncurses::PrintBorders(t_info *info) {
-	int			width;
-	int			height;
-
-	width = info->width;
-	height = info->height;
 	wattron(this->screen, COLOR_PAIR(7));
 	wattron(this->score, COLOR_PAIR(7));
-	for (int i = 0; i < (height + BORDERS); i++) {
+	for (int i = 0; i < (info->height + BORDERS); i++) {
 		mvwprintw(this->screen, i, 0, "|");
-		mvwprintw(this->screen, i, (width * 2) + 1, "|");
+		mvwprintw(this->screen, i, (info->width * 2) + 1, "|");
 	}
-	for (int i = 0; i < (width * 2 + BORDERS); i++) {
+	for (int i = 0; i < (info->width * 2 + BORDERS); i++) {
 		mvwprintw(this->screen, 0, i, "_");
 	}
 	for (int i = 0; i < (SCORE_HEIGHT + BORDERS); i++) {
 		mvwprintw(this->score, i, 0, "|");
-		mvwprintw(this->score, i, (width * 2) + 1, "|");
+		mvwprintw(this->score, i, (info->width * 2) + 1, "|");
 	}
-	for (int i = 0; i < (width * 2 + BORDERS); i++) {
+	for (int i = 0; i < (info->width * 2 + BORDERS); i++) {
 		mvwprintw(this->score, SCORE_HEIGHT + 1, i, "-");
 	}
 }
 
 int				Ncurses::ReadInput() {
-	int ch;
-
-	ch = wgetch(this->screen);
-	// std::cout << " HERE : " << ch << std::endl;
-	if (ch == 27)
-		return ESC;
-	if (ch == 10)
-		return ENTER;
-
-	if (ch == KEY_UP)
-		return UP;
-	if (ch == KEY_RIGHT)
-		return RIGHT;
-	if (ch == KEY_LEFT)
-		return LEFT;
-	if (ch == KEY_DOWN)
-		return DOWN;
-		
-	if (ch == 50)
-		return NCURSES;
-	if (ch == 51)
-		return QT;
-	if (ch == 52)
-		return SDL2;
-	return (0);
+	return wgetch(this->screen);
 }
 
 void			Ncurses::Map(t_info *info) {
-	char		**map;
-	int			width;
-	int			height;
-
-	map = info->map;
-	width = info->width;
-	height = info->height;
-
-	wclear(screen);
+	wclear(this->screen);
 	//	sides
 	wattron(this->screen, COLOR_PAIR(7));
-	for (int i = 0; i < (height + BORDERS); i++) {
+	for (int i = 0; i < (info->height + BORDERS); i++) {
 		mvwprintw(this->screen, i, 0, "|");
-		mvwprintw(this->screen, i, (width * 2) + 1, "|");
+		mvwprintw(this->screen, i, (info->width * 2) + 1, "|");
 	}
-	for (int i = 0; i < (width * 2 + BORDERS); i++) {
+	for (int i = 0; i < (info->width * 2 + BORDERS); i++) {
 		mvwprintw(this->screen, 0, i, "_");
-		mvwprintw(this->screen, height + 1, i, "-");
+		mvwprintw(this->screen, info->height + 1, i, "-");
 	}
 	//	map
-	for (int y = 0; y < height; y++) {
-		for (int x = 0; x < width; x++) {
-			if (map[y][x] == SNAKE_BODY) {
+	for (int y = 0; y < info->height; y++) {
+		for (int x = 0; x < info->width; x++) {
+			if (info->map[y][x] == SNAKE_BODY) {
 				wattron(this->screen, COLOR_PAIR(1));
 				mvwprintw(this->screen, y + 1, x * 2 + 1, "◎");
-			} else if (map[y][x] == SNAKE_HEAD) {
+			} else if (info->map[y][x] == SNAKE_HEAD) {
 				wattron(this->screen, COLOR_PAIR(2));
 				mvwprintw(this->screen, y + 1 , x * 2 + 1, "🌞");
-			} else if (map[y][x] == WALL) {
+			} else if (info->map[y][x] == WALL) {
 				wattron(this->screen, COLOR_PAIR(5));
 				mvwprintw(this->screen, y + 1, x * 2 + 1, "💣");
-			} else if (map[y][x] == APPLE) {
+			} else if (info->map[y][x] == APPLE) {
 				wattron(this->screen, COLOR_PAIR(4) | WA_BOLD);
 				// 🍒🍑🍐🍏🍊🍇🍅🍒💋🍪🔮🚪🏮©¤
 				mvwprintw(this->screen, y + 1, x * 2 + 1, "🍒");
@@ -126,35 +110,26 @@ void			Ncurses::Map(t_info *info) {
 			
 		}
 		wattron(this->screen, COLOR_PAIR(6));
-	}
+	
+	refresh();}
 	wrefresh(this->screen);
 }
 void			Ncurses::Score(t_info *info) {
-	int			total_score;
-	int			level;
-	int			difficult;
-	int			width;
-
-	width = info->width;
-	total_score = info->score;
-	level = info->level;
-	difficult = info->difficult;
-
-	wclear(score);
+	wclear(this->score);
 	//	information
 	wattron(this->score, COLOR_PAIR(6) | WA_BOLD);	// color on
-	mvwprintw(this->score, 1, 3,"Score : %d", total_score);
-	mvwprintw(this->score, 2, 3,"Level : %d", level);
-	mvwprintw(this->score, 3, 3,"Difficult : %d", difficult);
+	mvwprintw(this->score, 1, 3,"Score : %d", info->score);
+	mvwprintw(this->score, 2, 3,"Level : %d", info->level);
+	mvwprintw(this->score, 3, 3,"Difficult : %d", info->difficult);
 	// mvwprintw(this->score, 1, 40, "LIVES : 💖 💖 💖 ");
 	wattroff(this->score, COLOR_PAIR(6) | WA_BOLD);	// color off
 	//	sides
 	wattron(this->score, COLOR_PAIR(7));
 	for (int i = 0; i < (SCORE_HEIGHT + BORDERS); i++) {
 		mvwprintw(this->score, i, 0, "|");
-		mvwprintw(this->score, i, (width * 2) + 1, "|");
+		mvwprintw(this->score, i, (info->width * 2) + 1, "|");
 	}
-	for (int i = 0; i < (width * 2 + BORDERS); i++) {
+	for (int i = 0; i < (info->width * 2 + BORDERS); i++) {
 		mvwprintw(this->score, SCORE_HEIGHT + 1, i, "-");
 	}
 	wrefresh(this->score);
@@ -162,118 +137,59 @@ void			Ncurses::Score(t_info *info) {
 
 
 void			Ncurses::MainMenu(t_info *info) {
-	int			key;
-	int			cursor_position;
+	wclear(this->screen);
+	wclear(this->score);
 
-	key = 0;
-	cursor_position = 1;
-	while (key != ENTER)
-	{
-		wclear(this->screen);
-		wclear(this->score);
+	this->PrintBorders(info);
 
-		this->PrintBorders(info);
-
-		wattron(this->screen, COLOR_PAIR(1) | WA_BOLD);
-		mvwprintw(this->screen, (info->height + SCORE_HEIGHT) / 2 - 2, info->width / 2, "MENU");
-		cursor_position == 1 ? wattron(this->screen,COLOR_PAIR(2)) : wattron(this->screen,COLOR_PAIR(5));
-		mvwprintw(this->screen, (info->height + SCORE_HEIGHT) / 2, info->width / 2, "SINGLE GAME");
-		cursor_position == 2 ? wattron(this->screen,COLOR_PAIR(2)) : wattron(this->screen,COLOR_PAIR(5));
-		mvwprintw(this->screen, (info->height + SCORE_HEIGHT) / 2 + 1, info->width / 2, "PLAYER VS PLAYER");
-		cursor_position == 3 ? wattron(this->screen,COLOR_PAIR(2)) : wattron(this->screen,COLOR_PAIR(5));
-		mvwprintw(this->screen, (info->height + SCORE_HEIGHT) / 2 + 2, info->width / 2, "EXIT");
-		
-		wrefresh(this->screen);
-		wrefresh(this->score);
-
-		key = this->ReadInput();
-
-		if (key == 1 && cursor_position > 1)
-			cursor_position--;
-		else if (key == 4 && cursor_position < 3)
-			cursor_position++;
-		std::this_thread::sleep_for(std::chrono::milliseconds(50));
-	}
-
-	if (cursor_position == 1)
-		info->status = PLAY;
-	else if (cursor_position == 2)
-		;// info->status = ;
-	else
-		info->status = EXIT;
+	wattron(this->screen, COLOR_PAIR(1) | WA_BOLD);
+	mvwprintw(this->screen, (info->height + SCORE_HEIGHT) / 2 - 2, info->width / 2, "MENU");
+	info->menu_pos == 1 ? wattron(this->screen,COLOR_PAIR(2)) : wattron(this->screen,COLOR_PAIR(5));
+	mvwprintw(this->screen, (info->height + SCORE_HEIGHT) / 2, info->width / 2, "SINGLE GAME");
+	info->menu_pos == 2 ? wattron(this->screen,COLOR_PAIR(2)) : wattron(this->screen,COLOR_PAIR(5));
+	mvwprintw(this->screen, (info->height + SCORE_HEIGHT) / 2 + 1, info->width / 2, "PLAYER VS PLAYER");
+	info->menu_pos == 3 ? wattron(this->screen,COLOR_PAIR(2)) : wattron(this->screen,COLOR_PAIR(5));
+	mvwprintw(this->screen, (info->height + SCORE_HEIGHT) / 2 + 2, info->width / 2, "EXIT");
+	
+	refresh();
+	wrefresh(this->screen);
+	wrefresh(this->score);
 }
+
 void			Ncurses::PauseMenu(t_info *info) {
-	int			key;
-	int			cursor_position;
+	wclear(this->screen);
+	wclear(this->score);
 
-	key = 0;
-	cursor_position = 1;
-	while (key != ENTER)
-	{
-		wclear(this->screen);
-		wclear(this->score);
+	this->PrintBorders(info);
 
-		this->PrintBorders(info);
-
-		wattron(this->screen, COLOR_PAIR(1) | WA_BOLD);
-		mvwprintw(this->screen, (info->height + SCORE_HEIGHT) / 2 - 2, info->width / 2, "PAUSE");
-		cursor_position == 1 ? wattron(this->screen,COLOR_PAIR(2)) : wattron(this->screen,COLOR_PAIR(5));
-		mvwprintw(this->screen, (info->height + SCORE_HEIGHT) / 2, info->width / 2, "CONTINUE");
-		cursor_position == 2 ? wattron(this->screen,COLOR_PAIR(2)) : wattron(this->screen,COLOR_PAIR(5));
-		mvwprintw(this->screen, (info->height + SCORE_HEIGHT) / 2 + 1, info->width / 2, "MAIN MENU");
-
-		wrefresh(this->screen);
-		wrefresh(this->score);
-
-		key = this->ReadInput();
-		if (key == 1 && cursor_position > 1)
-			cursor_position--;
-		else if (key == 4 && cursor_position < 2)
-			cursor_position++;
-		std::this_thread::sleep_for(std::chrono::milliseconds(50));
-	}
-
-	if (cursor_position == 1)
-		info->status = PLAY;
-	else if (cursor_position == 2)
-		info->status = MAIN_MENU;
+	wattron(this->screen, COLOR_PAIR(1) | WA_BOLD);
+	mvwprintw(this->screen, (info->height + SCORE_HEIGHT) / 2 - 2, info->width / 2, "PAUSE");
+	info->menu_pos == 1 ? wattron(this->screen,COLOR_PAIR(2)) : wattron(this->screen,COLOR_PAIR(5));
+	mvwprintw(this->screen, (info->height + SCORE_HEIGHT) / 2, info->width / 2, "CONTINUE");
+	info->menu_pos == 2 ? wattron(this->screen,COLOR_PAIR(2)) : wattron(this->screen,COLOR_PAIR(5));
+	mvwprintw(this->screen, (info->height + SCORE_HEIGHT) / 2 + 1, info->width / 2, "MAIN MENU");
+	
+	refresh();
+	wrefresh(this->screen);
+	wrefresh(this->score);
 }
+
 void			Ncurses::GameOverMenu(t_info *info) {
-	int			key;
-	int			cursor_position;
+	wclear(this->screen);
+	wclear(this->score);
+	
+	this->PrintBorders(info);
 
-	key = 0;
-	cursor_position = 1;
-	while (key != ENTER)
-	{
-		wclear(this->screen);
-		wclear(this->score);
-		
-		this->PrintBorders(info);
-
-		wattron(this->screen, COLOR_PAIR(8) | WA_BOLD);
-		mvwprintw(this->screen, (info->height + SCORE_HEIGHT) / 2 - 2, info->width / 2, "GAME OVER");
-		cursor_position == 1 ? wattron(this->screen,COLOR_PAIR(2)) : wattron(this->screen,COLOR_PAIR(5));
-		mvwprintw(this->screen, (info->height + SCORE_HEIGHT) / 2, info->width / 2, "RESET");
-		cursor_position == 2 ? wattron(this->screen,COLOR_PAIR(2)) : wattron(this->screen,COLOR_PAIR(5));
-		mvwprintw(this->screen, (info->height + SCORE_HEIGHT) / 2 + 1, info->width / 2, "MAIN MENU");
-
-		wrefresh(this->screen);
-		wrefresh(this->score);
-
-		key = this->ReadInput();
-
-		if (key == 1 && cursor_position > 1)
-			cursor_position--;
-		else if (key == 4 && cursor_position < 2)
-			cursor_position++;
-		std::this_thread::sleep_for(std::chrono::milliseconds(50));
-	}
-
-	if (cursor_position == 1)
-		info->status = PLAY;
-	else if (cursor_position == 2)
-		info->status = MAIN_MENU;
+	wattron(this->screen, COLOR_PAIR(8) | WA_BOLD);
+	mvwprintw(this->screen, (info->height + SCORE_HEIGHT) / 2 - 2, info->width / 2, "GAME OVER");
+	info->menu_pos == 1 ? wattron(this->screen,COLOR_PAIR(2)) : wattron(this->screen,COLOR_PAIR(5));
+	mvwprintw(this->screen, (info->height + SCORE_HEIGHT) / 2, info->width / 2, "RESET");
+	info->menu_pos == 2 ? wattron(this->screen,COLOR_PAIR(2)) : wattron(this->screen,COLOR_PAIR(5));
+	mvwprintw(this->screen, (info->height + SCORE_HEIGHT) / 2 + 1, info->width / 2, "MAIN MENU");
+	
+	refresh();
+	wrefresh(this->screen);
+	wrefresh(this->score);
 }
 
 
@@ -294,10 +210,10 @@ int				Ncurses::SmallScreen(t_info *info) {
 		mvwprintw(this->screen, 12, 10, "SCREEN TO SMALL. RESIZE OR");
 		wattron(this->screen,COLOR_PAIR(5));
 		mvwprintw(this->screen, 13, 10, "USE ANOTHER MAP SIZE TO CONTINUE");
-
-		wrefresh(screen);
-		wrefresh(score);
-		std::this_thread::sleep_for(std::chrono::milliseconds(100));
+	
+		refresh();
+		wrefresh(this->screen);
+		wrefresh(this->score);
 		return (1);
 	}
 	else
@@ -306,21 +222,12 @@ int				Ncurses::SmallScreen(t_info *info) {
 
 
 int				Ncurses::Visual(t_info *info) {
-
-	int					key;
-
+	// endwin();
 	if (!this->SmallScreen(info))
 	{
-		//	Читаем клавиши
-		key = this->ReadInput();
-		if (key == ESC)
-			info->status = PAUSE_MENU;
-
-
 		if (info->status == PAUSE_MENU) {
 			this->PauseMenu(info);
 		} else if (info->status == GAME_OVER) {
-			this->GameOverScreen(info);
 			this->GameOverMenu(info);
 		} else if (info->status == MAIN_MENU) {
 			this->MainMenu(info);
@@ -328,88 +235,9 @@ int				Ncurses::Visual(t_info *info) {
 			this->Map(info);
 			this->Score(info);
 		}
+		
 	}
-	std::this_thread::sleep_for(std::chrono::milliseconds(260 / 2));
-	return (key);
-}
-
-IVisual*		NewVisual(t_info *info) { return new Ncurses(info); }
-void			DeleteVisual(IVisual* instance){
-	endwin();
-	delete instance;
+	return this->ReadInput();
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-void			Ncurses::GameOverScreen(t_info *info) {
-	int			width;
-	int			height;
-
-	wclear(this->screen);
-	wclear(this->score);
-
-	width = info->width;
-	height = info->height;
-
-	for (int i = 0; i < (height + SCORE_HEIGHT + BORDERS * 2) ;i++)
-	{
-		wclear(this->screen);
-		wclear(this->score);
-		//	sides
-		wattron(this->screen, COLOR_PAIR(7));
-		wattron(this->score, COLOR_PAIR(7));
-		for (int i = 0; i < (height + BORDERS); i++) {
-			mvwprintw(this->screen, i, 0, "|");
-			mvwprintw(this->screen, i, (width * 2) + 1, "|");
-		}
-		for (int i = 0; i < (width * 2 + BORDERS); i++) {
-			mvwprintw(this->screen, 0, i, "_");
-		}
-		for (int i = 0; i < (SCORE_HEIGHT + BORDERS); i++) {
-			mvwprintw(this->score, i, 0, "|");
-			mvwprintw(this->score, i, (width * 2) + 1, "|");
-		}
-		for (int i = 0; i < (width * 2 + BORDERS); i++) {
-			mvwprintw(this->score, SCORE_HEIGHT + 1, i, "-");
-		}
-
-		if (i / 2 - 2 > 1) {
-			wattron(this->screen, COLOR_PAIR(8) | WA_BOLD);
-			mvwprintw(this->screen, i / 2 - 3, width / 2, "GAME OVER");
-		}
-		if (i / 2 > 1) {
-			wattron(this->screen,COLOR_PAIR(4));
-			mvwprintw(this->screen, i / 2 - 1, width / 2, "SCORE : %d", info->score);
-		}
-
-		wrefresh(this->screen);
-		wrefresh(this->score);
-		std::this_thread::sleep_for(std::chrono::milliseconds(25));
-	}
-	std::this_thread::sleep_for(std::chrono::milliseconds(2000));
-}

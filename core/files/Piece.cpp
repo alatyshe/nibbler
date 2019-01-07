@@ -1,6 +1,6 @@
-#include "../../header/Piece.hpp"
-#include "../../header/Game.hpp"
-#include "../../header/Exception.hpp"
+#include "../header/Piece.hpp"
+#include "../header/Game.hpp"
+#include "../header/Exception.hpp"
 
 //	Construct
 Piece::Piece() : 
