@@ -48,6 +48,7 @@ $(NAME): $(CORE_OBJ)
 	@echo $(CYAN) "\n\tCompiling $@"$(RESET)
 	
 	@make -C ncurses/
+	@make -C glfw/
 	
 	@$(CXX) -lcurses -ldl -o $@ $^
 
@@ -69,6 +70,7 @@ clean:
 	@echo $(RED) "\t./objects path have been cleaned."$(RESET)
 	
 	@make clean -C ncurses/
+	@make clean -C glfw/
 
 #------ make fclean ------
 
@@ -82,7 +84,8 @@ fclean:
 	@echo $(RED) "\tcore.a have been cleaned.\n"$(RESET)
 
 	@make fclean -C ncurses/
-
+	@make clean -C glfw/
+	
 #------ make re ------
 re: fclean all
 

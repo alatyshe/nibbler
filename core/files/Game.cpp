@@ -16,7 +16,7 @@ Game::Game(int width, int height) {
 	_info->level = 2;
 	_info->difficult = 1;
 
-	_info->library = NCURSES;
+	_info->curr_lib = NCURSES;
 	_info->status = PLAY;
 	_info->menu_pos = 1;
 
@@ -173,10 +173,8 @@ void		Game::parseKeyInput(int key) {
 				_info->status = MAIN_MENU;
 			_info->menu_pos = 1;
 		}
-		return ;
 	}
-
-	if (key == LEFT || key == RIGHT) {
+	else if (key == LEFT || key == RIGHT) {
 		if (_head_move_x == 0) {
 			if (key == LEFT)
 				_head_move_x = 1;
@@ -192,11 +190,12 @@ void		Game::parseKeyInput(int key) {
 				_head_move_y = -1;
 			_head_move_x = 0;
 		}
-	} else if (key == NCURSES) {
+	}
+	if (key == NCURSES && _info->curr_lib != NCURSES) {
 		libManipulation(NCURSES);
-	} else if (key == QT) {
-		libManipulation(QT);
-	} else if (key == SDL2) {
+	} else if (key == GLFW && _info->curr_lib != GLFW) {
+		libManipulation(GLFW);
+	} else if (key == SDL2 && _info->curr_lib != SDL2) {
 		libManipulation(SDL2);
 	} else if (key == MENU) {
 		_info->status = PAUSE_MENU;
@@ -217,8 +216,8 @@ void		Game::libManipulation(int library) {
 
 	if (library == NCURSES) {
 		_handle = dlopen("./libcurses.dylib", RTLD_LAZY);
-	} else if (library == QT) {
-		_handle = dlopen("./libqt.dylib", RTLD_LAZY);
+	} else if (library == GLFW) {
+		_handle = dlopen("./libglfw.dylib", RTLD_LAZY);
 	} else if (library == SDL2) {
 		_handle = dlopen("./libsdl2.dylib", RTLD_LAZY);
 	} else if (library == EXIT) {
@@ -235,15 +234,18 @@ void		Game::libManipulation(int library) {
 		throw Exception("Missed Library");
 	}
 
+	_info->curr_lib = library;
 	*(void **) (&new_instanse) = dlsym(_handle, "NewVisual");
 	_visual = (*new_instanse)(_info);
+	if (_info->status == PLAY)
+		_info->status = PAUSE_MENU;
 }
 
 void		Game::MainLoop()
 {
 	int		key_input;
 
-	libManipulation(NCURSES);
+	libManipulation(GLFW);
 	resetGame();
 	while(true) {		
 		// Отображаем доску
