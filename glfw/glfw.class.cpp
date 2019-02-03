@@ -38,17 +38,46 @@ extern "C" {
 }
 
 
-void printText() {
-	char *string = "HELLO HELLO HELLO";
-	//set the position of the text in the window using the x and y coordinates
-	glRasterPos2f(20, 20);
-	//get the length of the string to display
-	int len = (int) strlen(string);
+void 	Glfw::PrintText(t_info *info, const char *text, int length, int x, int y) {
+	int			board_height; 
+	int			board_width;
+	int			score_height;
 
-	//loop to display character by character
-	for (int i = 0; i < len; i++) {
-		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24,str ing[i]);
+	board_height = info->height * CELL_SIZE + BORDERS * 10;
+	board_width = info->width * CELL_SIZE + BORDERS * 10;
+	score_height = SCORE_HEIGHT * 30;
+
+	glMatrixMode(GL_PROJECTION);
+	double *matrix = new double[16];
+	glGetDoublev(GL_PROJECTION, matrix);
+	glLoadIdentity();
+	glOrtho(0, board_width, 0, board_height + score_height, 0, 1);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	glPushMatrix();
+	glLoadIdentity();
+	glRasterPos2i(x, y);
+
+	for (int i = 0; i < length; i++) {
+		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, (int)text[i]);
 	}
+
+	glPopMatrix();
+	glMatrixMode(GL_PROJECTION);
+	glLoadMatrixd(matrix);
+	glMatrixMode(GL_MODELVIEW);
+
+
+	// char *string = "HELLO HELLO HELLO";
+	// //set the position of the text in the window using the x and y coordinates
+	// glRasterPos2f(20, 20);
+	// //get the length of the string to display
+	// int len = (int) strlen(string);
+
+	// //loop to display character by character
+	// for (int i = 0; i < len; i++) {
+	// 	glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24,str ing[i]);
+	// }
 };
 
 //Constructors and destructor
@@ -59,7 +88,6 @@ Glfw::Glfw(t_info *info) {
 	int			board_height; 
 	int			board_width;
 	int			score_height;
-	int			score_width;
 
 	if(!glfwInit()) {
 		exit(0);
@@ -126,22 +154,34 @@ void            Glfw::Map(t_info *info) {
 }
 
 void            Glfw::Score(t_info *info) {
-	printText();
+	std::string text;
+	text = "This is a simple text";
+	glColor3f(0, 0, 0);
+	PrintText(info, text.data(), text.size(), 20, 20);
 	return ;
 }
 
 void            Glfw::MainMenu(t_info *info) {
-	printText();
+	std::string text;
+	text = "This is a simple text";
+	glColor3f(0, 0, 0);
+	PrintText(info, text.data(), text.size(), 20, 20);
 	return ;
 }
 
 void            Glfw::PauseMenu(t_info *info) {
-	printText();
+	std::string text;
+	text = "This is a simple text";
+	glColor3f(0, 0, 0);
+	PrintText(info, text.data(), text.size(), 20, 20);
 	return ;
 }
 
 void            Glfw::GameOverMenu(t_info *info) {
-	printText();
+	std::string text;
+	text = "This is a simple text";
+	glColor3f(0, 0, 0);
+	PrintText(info, text.data(), text.size(), 20, 20);
 	return ;
 }
 
@@ -160,7 +200,7 @@ int             Glfw::Visual(t_info *info) {
 	glClearColor ( 1.0f, 1.0f, 1.0f, 1.0f );
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	// Draw gears
-	if (info->status == PAUSE_MENU) {
+		if (info->status == PAUSE_MENU) {
 			this->PauseMenu(info);
 		} else if (info->status == GAME_OVER) {
 			this->GameOverMenu(info);

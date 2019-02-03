@@ -30,7 +30,7 @@ CPPFLAGS			+=	-Iglfw/include
 
 LDFLAGS				=	-framework Cocoa -framework OpenGL -framework CoreVideo -framework IOKit 
 # 
-
+LDFLAGS				+=	-framework GLUT
 LDFLAGS				+=	-force_load ./glfw/src/libglfw3.a -shared -fPIC
 # ../include
 # LDFLAGS		=	-shared -undefined dynamic_lookup

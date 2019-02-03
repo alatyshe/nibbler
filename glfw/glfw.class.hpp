@@ -2,6 +2,8 @@
 
 extern "C" {
     #include <GLFW/glfw3.h>
+    #include <GLUT/glut.h>
+    // #include <glad/glad.h>
 }
 
 # include "../abstract/IVisual.hpp"
@@ -16,6 +18,7 @@ public:
 	~Glfw();
 	Glfw(t_info *info);
 
+	void 	PrintText(t_info *info, const char *text, int length, int x, int y);
 	//	ReadInput	
 	int		ReadInput();
 	//	Display Game
