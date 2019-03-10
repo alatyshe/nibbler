@@ -1,0 +1,9 @@
+*.a
+*.bin
+*.dSYM
+*.o
+*.pyc
+*.so
+build/
+*_pycache_*
+.DS_*
