@@ -12,7 +12,10 @@ void      DeleteVisual(IVisual* instance){
 
 
 sfml_lib::~sfml_lib(void) {
+  this->window->clear();
   this->window->close();
+  
+  delete this->window;
 }
 
 sfml_lib::sfml_lib(t_info *info) {
@@ -30,8 +33,10 @@ sfml_lib::sfml_lib(t_info *info) {
     exit(0);
   }
   if (!this->font.loadFromFile("./lib_sfml/roboto.regular.ttf")) {
+    this->window->close();
     exit(0);
   }
+  this->window->setActive(true);
 
 }
 
@@ -40,50 +45,31 @@ int       sfml_lib::ReadInput() {
 
   key_ = -1;
   sf::Event event;
-  while (this->window->pollEvent(event)) {
-    if (event.type == sf::Event::Closed)
+  this->window->pollEvent(event);
+  if (event.type == sf::Event::Closed)
+    key_ = ESC;
+  if (event.type == sf::Event::KeyPressed) {
+    if (event.key.code == sf::Keyboard::Escape)
       key_ = ESC;
-    if (event.type == sf::Event::KeyPressed) {
-      if (event.key.code == sf::Keyboard::Escape)
-        key_ = ESC;
-      if (event.key.code == sf::Keyboard::Q)
-        key_ = MENU;
-      if (event.key.code == sf::Keyboard::Return)
-        key_ = ENTER;
-      if (event.key.code == sf::Keyboard::Left) {
-        if (this->status != PLAY)
-          key_= LEFT;
-        else        
-          key_ = UP;
-      }
-      if (event.key.code == sf::Keyboard::Right) {
-        if (this->status != PLAY)
-          key_= RIGHT;
-        else
-          key_ = DOWN;
-      }
-      if (event.key.code == sf::Keyboard::Up) {
-        if (this->status != PLAY)
-          key_= UP;
-        else
-          key_ = LEFT;
-      }
-      if (event.key.code == sf::Keyboard::Down){
-        if (this->status != PLAY)
-          key_= DOWN;
-        else
-          key_ = RIGHT;
-      }
+    if (event.key.code == sf::Keyboard::Q)
+      key_ = MENU;
+    if (event.key.code == sf::Keyboard::Return)
+      key_ = ENTER;
+    if (event.key.code == sf::Keyboard::Left)
+      key_= LEFT;
+    if (event.key.code == sf::Keyboard::Right)
+      key_= RIGHT;
+    if (event.key.code == sf::Keyboard::Up)
+      key_= UP;
+    if (event.key.code == sf::Keyboard::Down)
+      key_= DOWN;
 
-      if (event.key.code == sf::Keyboard::Num1)
-        key_ = NCURSES;
-      if (event.key.code == sf::Keyboard::Num2)
-        key_ = SFML;
-      if (event.key.code == sf::Keyboard::Num3)
-        key_ = SDL2;
-    }
-    else
-      break;
+    if (event.key.code == sf::Keyboard::Num1)
+      key_ = NCURSES;
+    if (event.key.code == sf::Keyboard::Num2)
+      key_ = SFML;
+    if (event.key.code == sf::Keyboard::Num3)
+      key_ = SDL2;
   }
   return key_;
 }
@@ -95,7 +81,7 @@ void      sfml_lib::Map(t_info *info) {
   sf::RectangleShape box = sf::RectangleShape(sf::Vector2f(CELL_SIZE - 3, CELL_SIZE - 3));
   for (int y = 0; y < info->height; y++) {
     for (int x = 0; x < info->width; x++) {
-      box.setPosition(y * CELL_SIZE + border, x * CELL_SIZE + border);
+      box.setPosition(x * CELL_SIZE + border, y * CELL_SIZE + border);
       if (info->map[y][x] == SNAKE_BODY) {
         box.setFillColor(sf::Color(134,160,78));
       } else if (info->map[y][x] == SNAKE_HEAD) {

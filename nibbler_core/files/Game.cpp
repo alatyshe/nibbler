@@ -16,13 +16,13 @@ Game::Game(int width, int height) {
   _info->level = 2;
   _info->difficult = 1;
 
-  _info->curr_lib = NCURSES;
+  _info->curr_lib = SFML;
   _info->status = MAIN_MENU;
   _info->menu_pos = 1;
 
   //  Type of visualisation
-  _visual = NULL;
-  _handle = NULL;
+  this->_visual = NULL;
+  this->_handle = NULL;
 }
 
 t_info      *Game::getInfo() {
@@ -206,21 +206,21 @@ void        Game::libManipulation(int library) {
   IVisual*    (*new_instanse)(t_info *g);         //  указатель на функцию
   void        (*del_instance)(IVisual* instance); //  указатель на функцию
 
-  if (_handle) {
-    *(void **) (&del_instance) = dlsym(_handle, "DeleteVisual");
-    (*del_instance)(this->_visual);
-    dlclose(_handle);
-    _visual = NULL;
-    _handle = NULL;
+  if (this->_handle != NULL) {
+    *(void **) (&del_instance) = dlsym(this->_handle, "DeleteVisual");
+    (*del_instance)(_visual);
+    dlclose(this->_handle);
+    this->_visual = NULL;
+    this->_handle = NULL;
   }
 
   if (library == NCURSES) {
-    _handle = dlopen("./lib/libncurses_lib.dylib", RTLD_LAZY);
+    this->_handle = dlopen("./lib/libncurses_lib.dylib", RTLD_LAZY);
   } else if (library == SFML) {
-    _handle = dlopen("./lib/libsfml_lib.dylib", RTLD_LAZY);
+    this->_handle = dlopen("./lib/libsfml_lib.dylib", RTLD_LAZY);
   } else if (library == SDL2) {
-    _handle = dlopen("./lib/libsdl2.dylib", RTLD_LAZY);
-    // _handle = dlopen("./lib/libsdl2.dylib", RTLD_LAZY);
+    this->_handle = dlopen("./lib/libsdl2.dylib", RTLD_LAZY);
+    // this->_handle = dlopen("./lib/libsdl2.dylib", RTLD_LAZY);
   } else if (library == EXIT) {
     if (_info) {
       for (int i = 0; i < _info->height; i++)
@@ -231,13 +231,13 @@ void        Game::libManipulation(int library) {
     exit(0);
   }
   
-  if (!_handle) {
+  if (!this->_handle) {
     throw Exception("Missed Library");
   }
 
   _info->curr_lib = library;
-  *(void **) (&new_instanse) = dlsym(_handle, "NewVisual");
-  _visual = (*new_instanse)(_info);
+  *(void **) (&new_instanse) = dlsym(this->_handle, "NewVisual");
+  this->_visual = (*new_instanse)(_info);
   if (_info->status == PLAY)
     _info->status = PAUSE_MENU;
 }
@@ -251,7 +251,7 @@ void        Game::MainLoop()
   _info->status = PLAY;
   while(true) {       
     // Отображаем доску
-    key_input = _visual->Visual(_info);
+    key_input = this->_visual->Visual(_info);
     parseKeyInput(key_input);
     if (_info->status == GAME_OVER 
         || _info->status == MAIN_MENU) {
