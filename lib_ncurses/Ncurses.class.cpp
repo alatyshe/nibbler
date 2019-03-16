@@ -12,10 +12,6 @@ void      DeleteVisual(IVisual* instance){
 
 
 
-
-//Constructors and destructor
-Ncurses::Ncurses(void) { return ; }
-
 Ncurses::~Ncurses(void) {
   refresh();
   wrefresh(this->screen);

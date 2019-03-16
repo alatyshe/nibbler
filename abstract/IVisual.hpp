@@ -1,5 +1,4 @@
-#ifndef IVISUAL_H
-# define IVISUAL_H
+# pragma once
 
 # include "../nibbler_core/header/Info.hpp"
 
@@ -17,19 +16,8 @@ public:
   virtual void  MainMenu(t_info *info) = 0;
   virtual void  PauseMenu(t_info *info) = 0;
   virtual void  GameOverMenu(t_info *info) = 0;
-  //  Screens
-  virtual int   SmallScreen(t_info *info) = 0;
   //  MainVisual
   virtual int   Visual(t_info *info) = 0;
 
   virtual ~IVisual( void ) { ; };
 };
-
-#endif
-
-
-// virtual void init(...) = 0;
-// virtual void getEvents(...) = 0;
-// virtual void updateGameData(...) = 0;
-// virtual void refreshDisplay(...) = 0;
-// virtual void stop(...) = 0;

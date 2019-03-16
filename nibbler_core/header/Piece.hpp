@@ -1,5 +1,4 @@
-#ifndef PIECE_H
-# define PIECE_H
+#pragma once
 
 # include <string>
 
@@ -29,5 +28,3 @@ private:
 };
 
 std::ostream& operator<<(std::ostream& os, const Piece& df);
-
-#endif

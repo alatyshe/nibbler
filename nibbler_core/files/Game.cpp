@@ -145,7 +145,7 @@ void        Game::cleanMapFromSnake() {
 
 void        Game::parseKeyInput(int key) {
   if (key == ESC)
-      libManipulation(EXIT);
+    libManipulation(EXIT);
 
   if (_info->status == MAIN_MENU 
       || _info->status == PAUSE_MENU 
@@ -193,11 +193,11 @@ void        Game::parseKeyInput(int key) {
   }
   if (key == NCURSES && _info->curr_lib != NCURSES) {
     libManipulation(NCURSES);
-  } else if (key == GLFW && _info->curr_lib != GLFW) {
-    libManipulation(GLFW);
+  } else if (key == SFML && _info->curr_lib != SFML) {
+    libManipulation(SFML);
   } else if (key == SDL2 && _info->curr_lib != SDL2) {
     libManipulation(SDL2);
-  } else if (key == MENU) {
+  } else if (key == MENU && _info->status != MAIN_MENU && _info->status != GAME_OVER) {
     _info->status = PAUSE_MENU;
   }
 }
@@ -216,10 +216,11 @@ void        Game::libManipulation(int library) {
 
   if (library == NCURSES) {
     _handle = dlopen("./lib/libncurses_lib.dylib", RTLD_LAZY);
-  } else if (library == GLFW) {
-    _handle = dlopen("./lib/libglfw.dylib", RTLD_LAZY);
+  } else if (library == SFML) {
+    _handle = dlopen("./lib/libsfml_lib.dylib", RTLD_LAZY);
   } else if (library == SDL2) {
     _handle = dlopen("./lib/libsdl2.dylib", RTLD_LAZY);
+    // _handle = dlopen("./lib/libsdl2.dylib", RTLD_LAZY);
   } else if (library == EXIT) {
     if (_info) {
       for (int i = 0; i < _info->height; i++)
@@ -245,8 +246,9 @@ void        Game::MainLoop()
 {
   int     key_input;
 
-  libManipulation(NCURSES);
+  libManipulation(SFML);
   resetGame();
+  _info->status = PLAY;
   while(true) {       
     // Отображаем доску
     key_input = _visual->Visual(_info);

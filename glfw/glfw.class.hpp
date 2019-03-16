@@ -2,7 +2,7 @@
 
 extern "C" {
     #include <GLFW/glfw3.h>
-    #include <GLUT/glut.h>
+    // #include <GLUT/glut.h>
     // #include <glad/glad.h>
 }
 

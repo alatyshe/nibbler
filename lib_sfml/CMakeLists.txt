@@ -9,7 +9,7 @@ set(SFML_EXEC
 
 project(sfml_lib)
 set(SFML_LIB
-  main.cpp
+  Sfml.class.cpp
 )
 
 # Main library

@@ -49,7 +49,7 @@
 # define DOWN         258
 
 # define NCURSES      49
-# define GLFW         50
+# define SFML         50
 # define SDL2         51
 
 # define ESC          27

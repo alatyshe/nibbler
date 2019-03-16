@@ -1,5 +1,4 @@
-#ifndef PARSER_H
-# define PARSER_H
+#pragma once
 
 #include "../header/Info.hpp"
 #include "../header/Exception.hpp"
@@ -16,5 +15,3 @@ private:
   Parser  &operator=(const Parser& src);
   Parser(const Parser &src);
 };
-
-#endif

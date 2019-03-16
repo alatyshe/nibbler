@@ -18,6 +18,10 @@ set(CMAKE_CXX_STANDARD 17)
 # set(CMAKE_CXX_FLAGS
 #     "${CMAKE_CXX_FLAGS} -Wall -Werror -Wextra -Wno-register -Wno-deprecated-declarations -fPIC -march=native")
 
+# add_subdirectory(
+#     lib_glfw
+#     ${CMAKE_CURRENT_BINARY_DIR}/lib_sfml)
+
 add_subdirectory(
     lib_sfml
     ${CMAKE_CURRENT_BINARY_DIR}/lib_sfml)

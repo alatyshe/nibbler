@@ -1,18 +1,24 @@
-# pragma once
+#pragma once
 
-# include <ncurses.h>
+#include <SFML/Graphics.hpp>
+// #include <SFML/Graphics/Color.hpp>
+
 # include "../abstract/IVisual.hpp"
+
+#define CELL_SIZE   35
 
 class Game;
 class IVisual;
 
-class Ncurses: public IVisual {
+class sfml_lib: public IVisual {
 public:
-  Ncurses() = delete;
-  ~Ncurses();
-  Ncurses(t_info *info);
-  Ncurses& operator=(Ncurses const&) = delete;
+  sfml_lib() = delete;
+  sfml_lib(t_info *info);
+  ~sfml_lib();
+  sfml_lib& operator=(sfml_lib const&) = delete;
+  
 
+  void  PrintBorders(t_info *info);
   //  ReadInput 
   int   ReadInput();
   //  Display Game
@@ -26,12 +32,9 @@ public:
   int   Visual(t_info *info);
 
 private:
-  //  Screens
-  int   SmallScreen(t_info *info);
-  void  PrintBorders(t_info *info);
-
-  WINDOW  *screen;
-  WINDOW  *score;
+  sf::RenderWindow *window;
+  sf::Font font;
+  int status;
 };
 
 extern "C" IVisual* NewVisual(t_info *info);
