@@ -13,7 +13,7 @@ RESET	= "\x1b[0m"
 #==================
 
 .PHONY: all
-all: SFML lib_sfml lib_ncurses nibbler_core
+all: SFML GLFW lib_sfml lib_glfw lib_ncurses nibbler_core
 
 .PHONY: clean
 clean:
@@ -33,10 +33,22 @@ SFML: build/Makefile
 	@echo $(YELLOW)"\nCompiling third_party/$@ \n"$(RESET)
 	@(cd build && cmake --build third_party/SFML -- -j)
 
+.PHONY: GLFW
+GLFW: build/Makefile
+	@echo $(YELLOW)"\nCompiling third_party/$@ \n"$(RESET)
+	@(cd build && cmake --build third_party/GLFW -- -j)
+
+
+
 .PHONY: lib_sfml
 lib_sfml: build/Makefile
 	@echo $(YELLOW)"\nCompiling $@ library\n"$(RESET)
 	@(cd build && cmake --build lib_sfml -- -j)
+
+.PHONY: lib_glfw
+lib_glfw: build/Makefile
+	@echo $(YELLOW)"\nCompiling $@ library\n"$(RESET)
+	@(cd build && cmake --build lib_glfw -- -j)
 
 .PHONY: lib_ncurses
 lib_ncurses: build/Makefile

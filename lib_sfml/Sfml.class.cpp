@@ -72,6 +72,8 @@ int       sfml_lib::ReadInput() {
       key_ = SFML;
     if (event.key.code == sf::Keyboard::Num3)
       key_ = SDL2;
+    if (event.key.code == sf::Keyboard::Num4)
+      key_ = GLFW;
   }
   return key_;
 }

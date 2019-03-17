@@ -51,6 +51,7 @@
 # define NCURSES      49
 # define SFML         50
 # define SDL2         51
+# define GLFW         52
 
 # define ESC          27
 # define ENTER        10

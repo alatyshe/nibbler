@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.3)
 
 # Add Include directories
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/third_party/SFML/include)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/third_party/GLFW/include)
 
 add_subdirectory(
     third_party
@@ -25,6 +26,10 @@ set(CMAKE_CXX_STANDARD 17)
 add_subdirectory(
     lib_sfml
     ${CMAKE_CURRENT_BINARY_DIR}/lib_sfml)
+
+add_subdirectory(
+    lib_glfw
+    ${CMAKE_CURRENT_BINARY_DIR}/lib_glfw)
 
 add_subdirectory(
     lib_ncurses

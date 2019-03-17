@@ -197,6 +197,8 @@ void        Game::parseKeyInput(int key) {
     libManipulation(SFML);
   } else if (key == SDL2 && _info->curr_lib != SDL2) {
     libManipulation(SDL2);
+  } else if (key == GLFW && _info->curr_lib != GLFW) {
+    libManipulation(GLFW);
   } else if (key == MENU && _info->status != MAIN_MENU && _info->status != GAME_OVER) {
     _info->status = PAUSE_MENU;
   }
@@ -219,8 +221,9 @@ void        Game::libManipulation(int library) {
   } else if (library == SFML) {
     this->_handle = dlopen("./lib/libsfml_lib.dylib", RTLD_LAZY);
   } else if (library == SDL2) {
-    this->_handle = dlopen("./lib/libsdl2.dylib", RTLD_LAZY);
-    // this->_handle = dlopen("./lib/libsdl2.dylib", RTLD_LAZY);
+    this->_handle = dlopen("./lib/libsdl2_lib.dylib", RTLD_LAZY);
+  } else if (library == GLFW) {
+    this->_handle = dlopen("./lib/libglfw_lib.dylib", RTLD_LAZY);
   } else if (library == EXIT) {
     if (_info) {
       for (int i = 0; i < _info->height; i++)
