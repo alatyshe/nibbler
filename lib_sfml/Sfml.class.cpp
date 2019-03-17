@@ -12,8 +12,9 @@ void      DeleteVisual(IVisual* instance){
 
 
 sfml_lib::~sfml_lib(void) {
-  this->window->clear();
   this->window->close();
+  // this->window->clear(); 
+  // this->window->display();
   
   delete this->window;
 }
@@ -46,8 +47,9 @@ int       sfml_lib::ReadInput() {
   key_ = -1;
   sf::Event event;
   this->window->pollEvent(event);
-  if (event.type == sf::Event::Closed)
+  if (event.type == sf::Event::Closed) {
     key_ = ESC;
+  }
   if (event.type == sf::Event::KeyPressed) {
     if (event.key.code == sf::Keyboard::Escape)
       key_ = ESC;
@@ -305,7 +307,6 @@ void      sfml_lib::GameOverMenu(t_info *info) {
 
   text.setString("Main Menu");
   text.setCharacterSize(30); // in pixels, not points!
-  
   if (info->menu_pos == 2) {
     text.setFillColor(sf::Color(134,160,78));
     text.setCharacterSize(30); // in pixels, not points!

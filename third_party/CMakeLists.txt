@@ -1,9 +1,12 @@
-cmake_minimum_required(VERSION 3.3)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.3)
 
 # These projects all have CMakeLists by default, thank you devs!
 
 add_subdirectory(SFML)
 add_library(SFML SHARED IMPORTED)
+
+add_subdirectory(glfw)
+add_library(glfw SHARED IMPORTED)
 # target_include_directories(SFML INTERFACE ${SFML_ROOT_DIR})
 # target_include_directories(SFML SYSTEM INTERFACE SFML)
 # target_include_directories(SFML SYSTEM INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/SFML/include)
