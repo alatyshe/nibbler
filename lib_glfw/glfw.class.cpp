@@ -1,9 +1,7 @@
 #include "glfw.class.hpp"
 
 IVisual*        NewVisual(t_info *info) { return new Glfw(info); }
-void            DeleteVisual(IVisual* instance){
-  delete instance;
-}
+void            DeleteVisual(IVisual* instance){ delete instance; }
 
 extern "C" {
   int             key_;
@@ -14,73 +12,73 @@ extern "C" {
     (void)mods;
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
       key_ = ESC;
-    if (key == GLFW_KEY_Q && action == GLFW_PRESS)
+    else if (key == GLFW_KEY_Q && action == GLFW_PRESS)
       key_ = MENU;
 
-    if (key == GLFW_KEY_ENTER && action == GLFW_PRESS)
+    else if (key == GLFW_KEY_ENTER && action == GLFW_PRESS)
       key_ = ENTER;
-    if (key == GLFW_KEY_LEFT && action == GLFW_PRESS)
+    else if (key == GLFW_KEY_LEFT && action == GLFW_PRESS)
       key_ = LEFT;
-    if (key == GLFW_KEY_RIGHT && action == GLFW_PRESS)
+    else if (key == GLFW_KEY_RIGHT && action == GLFW_PRESS)
       key_ = RIGHT;
-    if (key == GLFW_KEY_UP && action == GLFW_PRESS)
+    else if (key == GLFW_KEY_UP && action == GLFW_PRESS)
       key_ = DOWN;
-    if (key == GLFW_KEY_DOWN && action == GLFW_PRESS)
+    else if (key == GLFW_KEY_DOWN && action == GLFW_PRESS)
       key_ = UP;
 
-    if (key == GLFW_KEY_1 && action == GLFW_PRESS)
+    else if (key == GLFW_KEY_1 && action == GLFW_PRESS)
       key_ = NCURSES;
-    if (key == GLFW_KEY_2 && action == GLFW_PRESS)
+    else if (key == GLFW_KEY_2 && action == GLFW_PRESS)
       key_ = SFML;
-    if (key == GLFW_KEY_3 && action == GLFW_PRESS)
+    else if (key == GLFW_KEY_3 && action == GLFW_PRESS)
       key_ = SDL2;
-    if (key == GLFW_KEY_4 && action == GLFW_PRESS)
+    else if (key == GLFW_KEY_4 && action == GLFW_PRESS)
       key_ = GLFW;
   }
 }
 
 
-void  Glfw::PrintText(t_info *info, const char *text, int length, int x, int y) {
-  int     board_height; 
-  int     board_width;
-  int     score_height;
+// void  Glfw::PrintText(t_info *info, const char x, int y) {
+//   int     board_height; 
+//   int     board_width;
+//   int     score_height;
 
-  board_height = info->height * CELL_SIZE + BORDERS * 10;
-  board_width = info->width * CELL_SIZE + BORDERS * 10;
-  score_height = SCORE_HEIGHT * 30;
+//   board_height = info->height * CELL_SIZE + BORDERS * 10;
+//   board_width = info->width * CELL_SIZE + BORDERS * 10;
+//   score_height = SCORE_HEIGHT * 30;
 
-  glMatrixMode(GL_PROJECTION);
-  double *matrix = new double[16];
-  glGetDoublev(GL_PROJECTION, matrix);
-  glLoadIdentity();
-  glOrtho(0, board_width, 0, board_height + score_height, 0, 1);
-  glMatrixMode(GL_MODELVIEW);
-  glLoadIdentity();
-  glPushMatrix();
-  glLoadIdentity();
-  glRasterPos2i(x, y);
+//   glMatrixMode(GL_PROJECTION);
+//   double *matrix = new double[16];
+//   glGetDoublev(GL_PROJECTION, matrix);
+//   glLoadIdentity();
+//   glOrtho(0, board_width, 0, board_height + score_height, 0, 1);
+//   glMatrixMode(GL_MODELVIEW);
+//   glLoadIdentity();
+//   glPushMatrix();
+//   glLoadIdentity();
+//   glRasterPos2i(x, y);
 
-  // for (int i = 0; i < length; i++) {
-  //   glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, (int)text[i]);
-  // }
+//   // for (int i = 0; i < length; i++) {
+//   //   glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, (int)text[i]);
+//   // }
 
-  // glPopMatrix();
-  // glMatrixMode(GL_PROJECTION);
-  // glLoadMatrixd(matrix);
-  // glMatrixMode(GL_MODELVIEW);
+//   // glPopMatrix();
+//   // glMatrixMode(GL_PROJECTION);
+//   // glLoadMatrixd(matrix);
+//   // glMatrixMode(GL_MODELVIEW);
 
 
-  // char *string = "HELLO HELLO HELLO";
-  // //set the position of the text in the window using the x and y coordinates
-  // glRasterPos2f(20, 20);
-  // //get the length of the string to display
-  // int len = (int) strlen(string);
+//   // char *string = "HELLO HELLO HELLO";
+//   // //set the position of the text in the window using the x and y coordinates
+//   // glRasterPos2f(20, 20);
+//   // //get the length of the string to display
+//   // int len = (int) strlen(string);
 
-  // //loop to display character by character
-  // for (int i = 0; i < len; i++) {
-  //  glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24,str ing[i]);
-  // }
-};
+//   // //loop to display character by character
+//   // for (int i = 0; i < len; i++) {
+//   //  glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24,str ing[i]);
+//   // }
+// };
 
 //Constructors and destructor
 Glfw::Glfw(void) { return ; }
@@ -102,7 +100,7 @@ Glfw::Glfw(t_info *info) {
   glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
   this->window_ = glfwCreateWindow(board_width,
                             board_height + score_height,
-                            "LearnOpenGL", NULL, NULL );
+                            "Nibbler GLFW", NULL, NULL );
   if (!this->window_) {
     glfwTerminate();
     exit(0);
@@ -120,6 +118,33 @@ Glfw::Glfw(t_info *info) {
     board_height + score_height,
     0.0,
     1.0); // this creates a canvas you can do 2D drawing on
+
+
+  // Fonts
+  FT_Library  library;   /* handle to library     */
+  FT_Face     face;      /* handle to face object */
+
+
+  auto error = FT_Init_FreeType( &library );
+  if (error) {
+    exit(0);
+  }
+  error = FT_New_Face(library,
+                       "./lib_glfw/roboto.regular.ttf",
+                       0,
+                       &face );
+
+  if (error == FT_Err_Unknown_File_Format) {
+    std::cout << "Unknown file font format" << std::endl;
+    exit(0);
+  } else if (error) {
+    std::cout << "File with font couldnt be found" << std::endl;
+    exit(0);
+  }
+  // ==============================
+  // ==============================
+  // ==============================
+
 
   glfwSetKeyCallback(window_, &KeyCallback);
 }
@@ -159,7 +184,7 @@ void            Glfw::Score(t_info *info) {
   std::string text;
   text = "This is a simple text";
   glColor3f(0, 0, 0);
-  PrintText(info, text.data(), text.size(), 20, 20);
+  // PrintText(info, text.data(), 20, 20);
   return ;
 }
 
@@ -167,7 +192,7 @@ void            Glfw::MainMenu(t_info *info) {
   std::string text;
   text = "This is a simple text";
   glColor3f(0, 0, 0);
-  PrintText(info, text.data(), text.size(), 20, 20);
+  // PrintText(info, text.data(), 20, 20);
   return ;
 }
 
@@ -175,7 +200,7 @@ void            Glfw::PauseMenu(t_info *info) {
   std::string text;
   text = "This is a simple text";
   glColor3f(0, 0, 0);
-  PrintText(info, text.data(), text.size(), 20, 20);
+  // PrintText(info, text.data(), 20, 20);
   return ;
 }
 
@@ -183,12 +208,8 @@ void            Glfw::GameOverMenu(t_info *info) {
   std::string text;
   text = "This is a simple text";
   glColor3f(0, 0, 0);
-  PrintText(info, text.data(), text.size(), 20, 20);
+  // PrintText(info, text.data(), 20, 20);
   return ;
-}
-
-int             Glfw::SmallScreen(t_info *info) {
-  return(0);
 }
 
 int             Glfw::Visual(t_info *info) {
@@ -218,6 +239,8 @@ int             Glfw::Visual(t_info *info) {
   
   return key_;
 }
+
+
 
 
 

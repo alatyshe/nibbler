@@ -1,21 +1,21 @@
-#pragma once
-
-#include <SFML/Graphics.hpp>
-// #include <SFML/Graphics/Color.hpp>
+#include <SDL2/SDL.h>
+#include <SDL_ttf.h>
+#include <iostream>
 
 # include "../abstract/IVisual.hpp"
 
-#define CELL_SIZE   35
+#define CELL_SIZE   30
 
 class Game;
 class IVisual;
 
-class sfml_lib: public IVisual {
+class sdl_lib: public IVisual {
 public:
-  sfml_lib() = delete;
-  sfml_lib(t_info *info);
-  ~sfml_lib();
-  sfml_lib& operator=(sfml_lib const&) = delete;
+  sdl_lib() = delete;
+  sdl_lib(t_info *info);
+  ~sdl_lib();
+  sdl_lib& operator=(sdl_lib const&) = delete;
+  
 
   //  ReadInput 
   int   ReadInput();
@@ -30,9 +30,10 @@ public:
   int   Visual(t_info *info);
 
 private:
-  sf::RenderWindow *window;
-  sf::Font font;
-  int status;
+  TTF_Font      *font_head;
+  TTF_Font      *font_menu;
+  SDL_Window    *window;
+  SDL_Renderer  *renderer;
 };
 
 extern "C" IVisual* NewVisual(t_info *info);

@@ -13,7 +13,7 @@ RESET	= "\x1b[0m"
 #==================
 
 .PHONY: all
-all: SFML GLFW lib_sfml lib_glfw lib_ncurses nibbler_core
+all: SFML GLFW freetype2 lib_sfml lib_glfw lib_ncurses lib_sdl nibbler_core
 
 .PHONY: clean
 clean:
@@ -38,6 +38,13 @@ GLFW: build/Makefile
 	@echo $(YELLOW)"\nCompiling third_party/$@ \n"$(RESET)
 	@(cd build && cmake --build third_party/GLFW -- -j)
 
+.PHONY: freetype2
+freetype2: build/Makefile
+	@echo $(YELLOW)"\nCompiling third_party/$@ \n"$(RESET)
+	@(cd build && cmake --build third_party/freetype2 -- -j)
+
+
+
 
 
 .PHONY: lib_sfml
@@ -54,6 +61,11 @@ lib_glfw: build/Makefile
 lib_ncurses: build/Makefile
 	@echo $(YELLOW)"\nCompiling $@ library\n"$(RESET)
 	@(cd build && cmake --build lib_ncurses -- -j)
+
+.PHONY: lib_sdl
+lib_sdl: build/Makefile
+	@echo $(YELLOW)"\nCompiling $@ library\n"$(RESET)
+	@(cd build && cmake --build lib_sdl -- -j)
 
 .PHONY: nibbler_core
 nibbler_core: build/Makefile

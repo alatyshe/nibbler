@@ -6,12 +6,12 @@
 class Game;
 class IVisual;
 
-class Ncurses: public IVisual {
+class ncurses_lib: public IVisual {
 public:
-  Ncurses() = delete;
-  ~Ncurses();
-  Ncurses(t_info *info);
-  Ncurses& operator=(Ncurses const&) = delete;
+  ncurses_lib() = delete;
+  ~ncurses_lib();
+  ncurses_lib(t_info *info);
+  ncurses_lib& operator=(ncurses_lib const&) = delete;
 
   //  ReadInput 
   int   ReadInput();

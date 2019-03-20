@@ -7,6 +7,10 @@ add_library(SFML SHARED IMPORTED)
 
 add_subdirectory(GLFW)
 add_library(GLFW SHARED IMPORTED)
+
+add_subdirectory(freetype2)
+add_library(freetype2 SHARED IMPORTED)
+
 # target_include_directories(SFML INTERFACE ${SFML_ROOT_DIR})
 # target_include_directories(SFML SYSTEM INTERFACE SFML)
 # target_include_directories(SFML SYSTEM INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/SFML/include)

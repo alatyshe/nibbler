@@ -1,14 +1,7 @@
-#include "Sfml.class.hpp"
+#include "sfml.class.hpp"
 
-IVisual*    NewVisual(t_info *info) { 
-  // Создаем экземпляр нашей визуализации и возвращаем
-  return new sfml_lib(info); 
-}
-
-void      DeleteVisual(IVisual* instance){
-  // закрываем все что связанно с визуализацией и удаляем экземпляр
-  delete instance;
-}
+IVisual*  NewVisual(t_info *info) { return new sfml_lib(info); }
+void      DeleteVisual(IVisual* instance){ delete instance; }
 
 
 sfml_lib::~sfml_lib(void) {
@@ -16,7 +9,7 @@ sfml_lib::~sfml_lib(void) {
   // this->window->clear(); 
   // this->window->display();
   
-  delete this->window;
+  // delete this->window;
 }
 
 sfml_lib::sfml_lib(t_info *info) {
@@ -29,15 +22,24 @@ sfml_lib::sfml_lib(t_info *info) {
   score_height = SCORE_HEIGHT * 50;
 
   this->status = info->status;
-  this->window = new sf::RenderWindow(sf::VideoMode(board_width, board_height + score_height), "Nibbler!");
-  if (!this->window){
+  // this->window = new sf::RenderWindow(sf::VideoMode(board_width, board_height + score_height), "Nibbler!");
+
+  std::cout << "FUCK1" << std::endl;
+  std::cout << "FUCK1" << std::endl;
+  this->window = new sf::RenderWindow(
+         sf::VideoMode(board_width, board_height + score_height), "Nibbler!");
+
+  std::cout << "FUCK2" << std::endl;
+  std::cout << "FUCK2" << std::endl;
+  if (this->window == nullptr){
     exit(0);
   }
   if (!this->font.loadFromFile("./lib_sfml/roboto.regular.ttf")) {
+    std::cout << "font file missed" << std::endl;
     this->window->close();
     exit(0);
   }
-  this->window->setActive(true);
+  // this->window->setActive(true);
 
 }
 
@@ -53,26 +55,26 @@ int       sfml_lib::ReadInput() {
   if (event.type == sf::Event::KeyPressed) {
     if (event.key.code == sf::Keyboard::Escape)
       key_ = ESC;
-    if (event.key.code == sf::Keyboard::Q)
+    else if (event.key.code == sf::Keyboard::Q)
       key_ = MENU;
-    if (event.key.code == sf::Keyboard::Return)
+    else if (event.key.code == sf::Keyboard::Return)
       key_ = ENTER;
-    if (event.key.code == sf::Keyboard::Left)
+    else if (event.key.code == sf::Keyboard::Left)
       key_= LEFT;
-    if (event.key.code == sf::Keyboard::Right)
+    else if (event.key.code == sf::Keyboard::Right)
       key_= RIGHT;
-    if (event.key.code == sf::Keyboard::Up)
+    else if (event.key.code == sf::Keyboard::Up)
       key_= UP;
-    if (event.key.code == sf::Keyboard::Down)
+    else if (event.key.code == sf::Keyboard::Down)
       key_= DOWN;
 
-    if (event.key.code == sf::Keyboard::Num1)
+    else if (event.key.code == sf::Keyboard::Num1)
       key_ = NCURSES;
-    if (event.key.code == sf::Keyboard::Num2)
+    else if (event.key.code == sf::Keyboard::Num2)
       key_ = SFML;
-    if (event.key.code == sf::Keyboard::Num3)
+    else if (event.key.code == sf::Keyboard::Num3)
       key_ = SDL2;
-    if (event.key.code == sf::Keyboard::Num4)
+    else if (event.key.code == sf::Keyboard::Num4)
       key_ = GLFW;
   }
   return key_;
@@ -109,7 +111,6 @@ void      sfml_lib::Score(t_info *info) {
   int score_height;
   std::string to_display;
   int y;
-  int x;
 
   board_height = (info->height * CELL_SIZE + BORDERS * 20);
   board_width = info->width * CELL_SIZE + BORDERS * 20;

@@ -1,18 +1,11 @@
-#include "Ncurses.class.hpp"
+#include "ncurses.class.hpp"
 
-IVisual*    NewVisual(t_info *info) { 
-  // Создаем экземпляр нашей визуализации и возвращаем
-  return new Ncurses(info); 
-}
-
-void      DeleteVisual(IVisual* instance){
-  // закрываем все что связанно с визуализацией и удаляем экземпляр
-  delete instance;
-}
+IVisual*  NewVisual(t_info *info) { return new ncurses_lib(info); }
+void      DeleteVisual(IVisual* instance){ delete instance; }
 
 
 
-Ncurses::~Ncurses(void) {
+ncurses_lib::~ncurses_lib(void) {
   refresh();
   wrefresh(this->screen);
   wrefresh(this->score);
@@ -21,7 +14,7 @@ Ncurses::~Ncurses(void) {
   endwin();
 }
 
-Ncurses::Ncurses(t_info *info) {
+ncurses_lib::ncurses_lib(t_info *info) {
   setlocale(LC_ALL, "");
   initscr();        //  ncurses
 
@@ -49,11 +42,11 @@ Ncurses::Ncurses(t_info *info) {
   keypad(this->screen, TRUE);     //  для восприятия стрелочек
 }
 
-int       Ncurses::ReadInput() {
+int       ncurses_lib::ReadInput() {
   return wgetch(this->screen);
 }
 
-void      Ncurses::PrintBorders(t_info *info) {
+void      ncurses_lib::PrintBorders(t_info *info) {
   wattron(this->screen, COLOR_PAIR(7));
   wattron(this->score, COLOR_PAIR(7));
   for (int i = 0; i < (info->height + BORDERS); i++) {
@@ -72,7 +65,7 @@ void      Ncurses::PrintBorders(t_info *info) {
   }
 }
 
-void      Ncurses::Map(t_info *info) {
+void      ncurses_lib::Map(t_info *info) {
   //  sides
   wattron(this->screen, COLOR_PAIR(7));
   for (int i = 0; i < (info->height + BORDERS); i++) {
@@ -109,7 +102,7 @@ void      Ncurses::Map(t_info *info) {
   }
 }
 
-void      Ncurses::Score(t_info *info) {
+void      ncurses_lib::Score(t_info *info) {
   //  information
   wattron(this->score, COLOR_PAIR(6) | WA_BOLD);  // color on
   mvwprintw(this->score, 1, 3,"Score : %d", info->score);
@@ -129,7 +122,7 @@ void      Ncurses::Score(t_info *info) {
 }
 
 
-void      Ncurses::MainMenu(t_info *info) {
+void      ncurses_lib::MainMenu(t_info *info) {
   this->PrintBorders(info);
 
   wattron(this->screen, COLOR_PAIR(1) | WA_BOLD);
@@ -142,7 +135,7 @@ void      Ncurses::MainMenu(t_info *info) {
   mvwprintw(this->screen, (info->height + SCORE_HEIGHT) / 2 + 2, info->width / 2, "EXIT");
 }
 
-void      Ncurses::PauseMenu(t_info *info) {
+void      ncurses_lib::PauseMenu(t_info *info) {
   this->PrintBorders(info);
 
   wattron(this->screen, COLOR_PAIR(1) | WA_BOLD);
@@ -153,7 +146,7 @@ void      Ncurses::PauseMenu(t_info *info) {
   mvwprintw(this->screen, (info->height + SCORE_HEIGHT) / 2 + 1, info->width / 2, "MAIN MENU");
 }
 
-void      Ncurses::GameOverMenu(t_info *info) {
+void      ncurses_lib::GameOverMenu(t_info *info) {
   this->PrintBorders(info);
 
   wattron(this->screen, COLOR_PAIR(8) | WA_BOLD);
@@ -165,7 +158,7 @@ void      Ncurses::GameOverMenu(t_info *info) {
 }
 
 
-int       Ncurses::SmallScreen(t_info *info) {
+int       ncurses_lib::SmallScreen(t_info *info) {
   int         screen_width;
   int         screen_height;
 
@@ -186,7 +179,7 @@ int       Ncurses::SmallScreen(t_info *info) {
 }
 
 
-int       Ncurses::Visual(t_info *info) {
+int       ncurses_lib::Visual(t_info *info) {
   if (!this->SmallScreen(info))
   {
     wclear(this->screen);

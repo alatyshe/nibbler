@@ -208,8 +208,9 @@ void        Game::libManipulation(int library) {
   IVisual*    (*new_instanse)(t_info *g);         //  указатель на функцию
   void        (*del_instance)(IVisual* instance); //  указатель на функцию
 
+  // void        (*DeleteLibWrap)(InterfaceLibrary *);
   if (this->_handle != NULL) {
-    *(void **) (&del_instance) = dlsym(this->_handle, "DeleteVisual");
+    del_instance = (void (*) (IVisual*)) dlsym(this->_handle, "DeleteVisual");
     (*del_instance)(_visual);
     dlclose(this->_handle);
     this->_visual = NULL;
@@ -239,7 +240,7 @@ void        Game::libManipulation(int library) {
   }
 
   _info->curr_lib = library;
-  *(void **) (&new_instanse) = dlsym(this->_handle, "NewVisual");
+  new_instanse = (IVisual* (*) (s_info *)) dlsym(this->_handle, "NewVisual");
   this->_visual = (*new_instanse)(_info);
   if (_info->status == PLAY)
     _info->status = PAUSE_MENU;
@@ -249,9 +250,9 @@ void        Game::MainLoop()
 {
   int     key_input;
 
-  libManipulation(SFML);
+  libManipulation(SDL2);
   resetGame();
-  _info->status = PLAY;
+  // _info->status = PLAY;
   while(true) {       
     // Отображаем доску
     key_input = this->_visual->Visual(_info);
