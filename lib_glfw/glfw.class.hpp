@@ -1,20 +1,20 @@
 #pragma once
 
 #include <GLFW/glfw3.h>
-#include <ft2build.h>
+#include <FTGL/ftgl.h>
+// #include <ft2build.h>
 #include FT_FREETYPE_H
 
 # include "../abstract/IVisual.hpp"
 
-#define CELL_SIZE   14
+#define CELL_SIZE   30
 
-class Glfw: public IVisual {
+class glfw_lib: public IVisual {
 public:
-  Glfw();
-  ~Glfw();
-  Glfw(t_info *info);
+  glfw_lib();
+  ~glfw_lib();
+  glfw_lib(t_info *info);
 
-  // void PrintText(t_info *info, const char x, int y);
   //  ReadInput 
   int   ReadInput();
   //  Display Game
@@ -29,9 +29,10 @@ public:
   //  Main func
   int   Visual(t_info *info);
 
+
 private:
-  GLFWwindow* window_;
-  void        DrawBackground(t_info *info);
+  GLFWwindow  *window_;
+  FTFont      *font_;
   void        DrawSquare(int x, int y);
 
 };

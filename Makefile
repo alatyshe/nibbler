@@ -13,7 +13,7 @@ RESET	= "\x1b[0m"
 #==================
 
 .PHONY: all
-all: SFML GLFW freetype2 lib_sfml lib_glfw lib_ncurses lib_sdl nibbler_core
+all: SFML GLFW freetype2 FTGL lib_sfml lib_glfw lib_ncurses lib_sdl nibbler_core
 
 .PHONY: clean
 clean:
@@ -43,6 +43,10 @@ freetype2: build/Makefile
 	@echo $(YELLOW)"\nCompiling third_party/$@ \n"$(RESET)
 	@(cd build && cmake --build third_party/freetype2 -- -j)
 
+.PHONY: FTGL
+FTGL: build/Makefile
+	@echo $(YELLOW)"\nCompiling third_party/$@ \n"$(RESET)
+	@(cd build && cmake --build third_party/FTGL -- -j)
 
 
 

@@ -7,6 +7,8 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/third_party/SFML/include)
 # GLFW
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/third_party/GLFW/include)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/third_party/freetype2/include)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/third_party/FTGL/src)
+
 
 add_subdirectory(
     third_party

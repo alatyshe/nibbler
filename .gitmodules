@@ -10,3 +10,6 @@
 [submodule "third_party/cmake_sdl"]
 	path = third_party/cmake_sdl
 	url = https://github.com/tcbrindle/sdl2-cmake-scripts.git
+[submodule "third_party/FTGL"]
+	path = third_party/FTGL
+	url = https://github.com/ulrichard/ftgl.git

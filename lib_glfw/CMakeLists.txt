@@ -19,6 +19,7 @@ find_package(OpenGL REQUIRED)
 add_library(glfw_lib ${GLFW_LIB})
 target_link_libraries(glfw_lib 
 	glfw
+	ftgl
 	${OPENGL_gl_LIBRARY}
 	${FREETYPE_LIBRARIES})
 
