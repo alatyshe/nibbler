@@ -16,7 +16,7 @@ set(SDL_LIB
   sdl.class.cpp
 )
 
-# Main library
+# Library
 add_library(sdl2_lib ${SDL_LIB})
 target_link_libraries(sdl2_lib
 	${SDL2_LIBRARY}

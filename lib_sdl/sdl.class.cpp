@@ -31,7 +31,8 @@ sdl_lib::sdl_lib(t_info *info) {
     exit(0);
   }
   
-  this->window = SDL_CreateWindow("SDL Nibbler", 100, 100, board_width, board_height + score_height, 0);
+  this->window = SDL_CreateWindow("SDL Nibbler", 100, 100, 
+      board_width, board_height + score_height, 0);
   if (this->window == nullptr) {
     std::cout << "Failed to create window : " << SDL_GetError();
     exit(0);
@@ -147,7 +148,7 @@ void      sdl_lib::Score(t_info *info) {
   
   to_display = "Score\t\t: " + std::to_string(info->score);
   surface = TTF_RenderText_Solid(this->font_menu,
-    to_display.c_str(), {255, 255, 255});
+    to_display.c_str(), {255, 255, 255, 255});
   texture = SDL_CreateTextureFromSurface(this->renderer, surface);
   SDL_QueryTexture(texture, NULL, NULL, &texW, &texH);
   dstrect = {50, y, texW, texH};
@@ -157,7 +158,7 @@ void      sdl_lib::Score(t_info *info) {
 
   to_display = "Level\t\t : " + std::to_string(info->level);
   surface = TTF_RenderText_Solid(this->font_menu,
-    to_display.c_str(), {255, 255, 255});
+    to_display.c_str(), {255, 255, 255, 255});
   texture = SDL_CreateTextureFromSurface(this->renderer, surface);
   SDL_QueryTexture(texture, NULL, NULL, &texW, &texH);
   dstrect = {50, y + 35, texW, texH};
@@ -167,7 +168,7 @@ void      sdl_lib::Score(t_info *info) {
 
   to_display = "Difficult\t: " + std::to_string(info->difficult);
   surface = TTF_RenderText_Solid(this->font_menu,
-    to_display.c_str(), {255, 255, 255});
+    to_display.c_str(), {255, 255, 255, 255});
   texture = SDL_CreateTextureFromSurface(this->renderer, surface);
   SDL_QueryTexture(texture, NULL, NULL, &texW, &texH);
   dstrect = {50, y + 70, texW, texH};
@@ -197,7 +198,7 @@ void      sdl_lib::MainMenu(t_info *info) {
   x = board_width / 3;
 
   surface = TTF_RenderText_Solid(this->font_head,
-    "MAIN MENU", {255, 138, 0});
+    "MAIN MENU", {255, 138, 0, 255});
   texture = SDL_CreateTextureFromSurface(this->renderer, surface);
   SDL_QueryTexture(texture, NULL, NULL, &texW, &texH);
   dstrect = {x, y, texW, texH};
@@ -207,10 +208,10 @@ void      sdl_lib::MainMenu(t_info *info) {
 
   if (info->menu_pos == 1){
     surface = TTF_RenderText_Solid(this->font_menu,
-    "Single Game", {134, 160, 78});
+    "Single Game", {134, 160, 78, 255});
   } else {
     surface = TTF_RenderText_Solid(this->font_menu,
-    "Single Game", {255, 255, 255});
+    "Single Game", {255, 255, 255, 255});
   }
   texture = SDL_CreateTextureFromSurface(this->renderer, surface);
   SDL_QueryTexture(texture, NULL, NULL, &texW, &texH);
@@ -221,10 +222,10 @@ void      sdl_lib::MainMenu(t_info *info) {
 
   if (info->menu_pos == 2){
     surface = TTF_RenderText_Solid(this->font_menu,
-    "Player vs Player", {134, 160, 78});
+    "Player vs Player", {134, 160, 78, 255});
   } else {
     surface = TTF_RenderText_Solid(this->font_menu,
-    "Player vs Player", {255, 255, 255});
+    "Player vs Player", {255, 255, 255, 255});
   }
   texture = SDL_CreateTextureFromSurface(this->renderer, surface);
   SDL_QueryTexture(texture, NULL, NULL, &texW, &texH);
@@ -235,10 +236,10 @@ void      sdl_lib::MainMenu(t_info *info) {
   
   if (info->menu_pos == 3){
     surface = TTF_RenderText_Solid(this->font_menu,
-    "Exit", {134, 160, 78});
+    "Exit", {134, 160, 78, 255});
   } else {
     surface = TTF_RenderText_Solid(this->font_menu,
-    "Exit", {255, 255, 255});
+    "Exit", {255, 255, 255, 255});
   }
   texture = SDL_CreateTextureFromSurface(this->renderer, surface);
   SDL_QueryTexture(texture, NULL, NULL, &texW, &texH);
@@ -266,7 +267,7 @@ void      sdl_lib::PauseMenu(t_info *info) {
   y = (board_height) / 2;
   x = board_width / 3;
   surface = TTF_RenderText_Solid(this->font_head,
-    "PAUSE MENU", {255, 138, 0});
+    "PAUSE MENU", {255, 138, 0, 255});
   texture = SDL_CreateTextureFromSurface(this->renderer, surface);
   SDL_QueryTexture(texture, NULL, NULL, &texW, &texH);
   dstrect = {x, y, texW, texH};
@@ -276,10 +277,10 @@ void      sdl_lib::PauseMenu(t_info *info) {
 
   if (info->menu_pos == 1){
     surface = TTF_RenderText_Solid(this->font_menu,
-    "Continue", {134, 160, 78});
+    "Continue", {134, 160, 78, 255});
   } else {
     surface = TTF_RenderText_Solid(this->font_menu,
-    "Continue", {255, 255, 255});
+    "Continue", {255, 255, 255, 255});
   }
   texture = SDL_CreateTextureFromSurface(this->renderer, surface);
   SDL_QueryTexture(texture, NULL, NULL, &texW, &texH);
@@ -290,10 +291,10 @@ void      sdl_lib::PauseMenu(t_info *info) {
 
   if (info->menu_pos == 2){
     surface = TTF_RenderText_Solid(this->font_menu,
-    "Main Menu", {134, 160, 78});
+    "Main Menu", {134, 160, 78, 255});
   } else {
     surface = TTF_RenderText_Solid(this->font_menu,
-    "Main Menu", {255, 255, 255});
+    "Main Menu", {255, 255, 255, 255});
   }
   texture = SDL_CreateTextureFromSurface(this->renderer, surface);
   SDL_QueryTexture(texture, NULL, NULL, &texW, &texH);
@@ -321,7 +322,7 @@ void      sdl_lib::GameOverMenu(t_info *info) {
   y = (board_height) / 2;
   x = board_width / 3;
   surface = TTF_RenderText_Solid(this->font_head,
-    "GAME OVER", {255, 138, 0});
+    "GAME OVER", {255, 138, 0, 255});
   texture = SDL_CreateTextureFromSurface(this->renderer, surface);
   SDL_QueryTexture(texture, NULL, NULL, &texW, &texH);
   dstrect = {x, y, texW, texH};
@@ -331,10 +332,10 @@ void      sdl_lib::GameOverMenu(t_info *info) {
 
   if (info->menu_pos == 1){
     surface = TTF_RenderText_Solid(this->font_menu,
-    "Reset", {134, 160, 78});
+    "Reset", {134, 160, 78, 255});
   } else {
     surface = TTF_RenderText_Solid(this->font_menu,
-    "Reset", {255, 255, 255});
+    "Reset", {255, 255, 255, 255});
   }
   texture = SDL_CreateTextureFromSurface(this->renderer, surface);
   SDL_QueryTexture(texture, NULL, NULL, &texW, &texH);
@@ -345,10 +346,10 @@ void      sdl_lib::GameOverMenu(t_info *info) {
 
   if (info->menu_pos == 2){
     surface = TTF_RenderText_Solid(this->font_menu,
-    "Main Menu", {134, 160, 78});
+    "Main Menu", {134, 160, 78, 255});
   } else {
     surface = TTF_RenderText_Solid(this->font_menu,
-    "Main Menu", {255, 255, 255});
+    "Main Menu", {255, 255, 255, 255});
   }
 
   texture = SDL_CreateTextureFromSurface(this->renderer, surface);

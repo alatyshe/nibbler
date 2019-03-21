@@ -7,8 +7,7 @@ set(NCURSES_LIB
   ncurses.class.cpp
 )
 
-# Main library
+# Library
 add_library(ncurses_lib ${NCURSES_LIB})
 target_link_libraries(ncurses_lib
 	ncurses)
-
