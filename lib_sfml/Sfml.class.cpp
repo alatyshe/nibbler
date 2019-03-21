@@ -5,9 +5,9 @@ void      DeleteVisual(IVisual* instance){ delete instance; }
 
 
 sfml_lib::~sfml_lib(void) {
-  this->window->close();
-  // this->window->clear(); 
-  // this->window->display();
+  this->window.close();
+  // this->window.clear(); 
+  // this->window.display();
   
   // delete this->window;
 }
@@ -22,24 +22,14 @@ sfml_lib::sfml_lib(t_info *info) {
   score_height = SCORE_HEIGHT * 50;
 
   this->status = info->status;
-  // this->window = new sf::RenderWindow(sf::VideoMode(board_width, board_height + score_height), "Nibbler!");
+  this->window.create(sf::VideoMode(board_width, board_height + score_height), "Nibbler!");
 
-  std::cout << "FUCK1" << std::endl;
-  std::cout << "FUCK1" << std::endl;
-  this->window = new sf::RenderWindow(
-         sf::VideoMode(board_width, board_height + score_height), "Nibbler!");
-
-  std::cout << "FUCK2" << std::endl;
-  std::cout << "FUCK2" << std::endl;
-  if (this->window == nullptr){
-    exit(0);
-  }
   if (!this->font.loadFromFile("./lib_sfml/roboto.regular.ttf")) {
     std::cout << "font file missed" << std::endl;
-    this->window->close();
+    this->window.close();
     exit(0);
   }
-  // this->window->setActive(true);
+  // this->window.setActive(true);
 
 }
 
@@ -48,7 +38,7 @@ int       sfml_lib::ReadInput() {
 
   key_ = -1;
   sf::Event event;
-  this->window->pollEvent(event);
+  this->window.pollEvent(event);
   if (event.type == sf::Event::Closed) {
     key_ = ESC;
   }
@@ -99,7 +89,7 @@ void      sfml_lib::Map(t_info *info) {
       } else {
         box.setFillColor(sf::Color(255,255,255));
       }
-      this->window->draw(box);
+      this->window.draw(box);
     }
   }
 }
@@ -125,7 +115,7 @@ void      sfml_lib::Score(t_info *info) {
   text.setFillColor(sf::Color(255,255,255));
   text.setStyle(sf::Text::Bold);
   text.setPosition(50, y);
-  this->window->draw(text);
+  this->window.draw(text);
 
   to_display = "Level\t\t : " + std::to_string(info->level);
   text.setString(to_display);
@@ -133,7 +123,7 @@ void      sfml_lib::Score(t_info *info) {
   text.setFillColor(sf::Color(255,255,255));
   text.setStyle(sf::Text::Bold);
   text.setPosition(50, y + 35);
-  this->window->draw(text);
+  this->window.draw(text);
 
   to_display = "Difficult\t: " + std::to_string(info->difficult);
   text.setString(to_display);
@@ -141,7 +131,7 @@ void      sfml_lib::Score(t_info *info) {
   text.setFillColor(sf::Color(255,255,255));
   text.setStyle(sf::Text::Bold);
   text.setPosition(50, y + 70);
-  this->window->draw(text);
+  this->window.draw(text);
 }
 
 
@@ -167,7 +157,7 @@ void      sfml_lib::MainMenu(t_info *info) {
   text.setFillColor(sf::Color(255, 138, 0));
   text.setStyle(sf::Text::Bold);
   text.setPosition(x, y);
-  this->window->draw(text);
+  this->window.draw(text);
 
   text.setString("Single Game");
   text.setCharacterSize(30); // in pixels, not points!
@@ -182,7 +172,7 @@ void      sfml_lib::MainMenu(t_info *info) {
     text.setStyle(sf::Text::Regular);
   }
   text.setPosition(x, y + 45);
-  this->window->draw(text);
+  this->window.draw(text);
 
   text.setString("Player vs Player");
   text.setCharacterSize(30); // in pixels, not points!
@@ -197,7 +187,7 @@ void      sfml_lib::MainMenu(t_info *info) {
     text.setStyle(sf::Text::Regular);
   }
   text.setPosition(x, y + 80);
-  this->window->draw(text);
+  this->window.draw(text);
 
   text.setString("Exit");
   text.setCharacterSize(30); // in pixels, not points!
@@ -212,7 +202,7 @@ void      sfml_lib::MainMenu(t_info *info) {
     text.setStyle(sf::Text::Regular);
   }
   text.setPosition(x, y + 110);
-  this->window->draw(text);
+  this->window.draw(text);
 }
 
 void      sfml_lib::PauseMenu(t_info *info) {
@@ -237,7 +227,7 @@ void      sfml_lib::PauseMenu(t_info *info) {
   text.setFillColor(sf::Color(255, 138, 0));
   text.setStyle(sf::Text::Bold);
   text.setPosition(x, y);
-  this->window->draw(text);
+  this->window.draw(text);
 
   text.setString("Continue");
   text.setCharacterSize(30); // in pixels, not points!
@@ -252,7 +242,7 @@ void      sfml_lib::PauseMenu(t_info *info) {
     text.setStyle(sf::Text::Regular);
   }
   text.setPosition(x, y + 45);
-  this->window->draw(text);
+  this->window.draw(text);
 
   text.setString("Main Menu");
   text.setCharacterSize(30); // in pixels, not points!  
@@ -267,7 +257,7 @@ void      sfml_lib::PauseMenu(t_info *info) {
     text.setStyle(sf::Text::Regular);
   }
   text.setPosition(x, y + 80);
-  this->window->draw(text);
+  this->window.draw(text);
 }
 
 void      sfml_lib::GameOverMenu(t_info *info) {
@@ -291,7 +281,7 @@ void      sfml_lib::GameOverMenu(t_info *info) {
   text.setFillColor(sf::Color(255, 138, 0));
   text.setStyle(sf::Text::Bold);
   text.setPosition(x, y);
-  this->window->draw(text);
+  this->window.draw(text);
 
   text.setString("Reset");
   text.setCharacterSize(30); // in pixels, not points!
@@ -306,7 +296,7 @@ void      sfml_lib::GameOverMenu(t_info *info) {
     text.setStyle(sf::Text::Regular);
   }
   text.setPosition(x, y + 45);
-  this->window->draw(text);
+  this->window.draw(text);
 
   text.setString("Main Menu");
   text.setCharacterSize(30); // in pixels, not points!
@@ -321,13 +311,13 @@ void      sfml_lib::GameOverMenu(t_info *info) {
     text.setStyle(sf::Text::Regular);
   }
   text.setPosition(x, y + 80);
-  this->window->draw(text);
+  this->window.draw(text);
 }
 
 
 int       sfml_lib::Visual(t_info *info) {
   
-  this->window->clear();
+  this->window.clear();
   this->status = info->status;
 
   if (info->status == PAUSE_MENU) {
@@ -341,7 +331,7 @@ int       sfml_lib::Visual(t_info *info) {
     this->Map(info);
     this->Score(info);
   }
-  this->window->display();
+  this->window.display();
   return this->ReadInput();
 }
 

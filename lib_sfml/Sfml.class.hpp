@@ -30,7 +30,7 @@ public:
   int   Visual(t_info *info);
 
 private:
-  sf::RenderWindow *window;
+  sf::RenderWindow window;
   sf::Font font;
   int status;
 };

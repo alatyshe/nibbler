@@ -10,7 +10,7 @@ sdl_lib::~sdl_lib(void) {
   TTF_CloseFont(this->font_head);
   TTF_CloseFont(this->font_menu);
   TTF_Quit();
-  SDL_Quit(); 
+  SDL_Quit();
 }
 
 sdl_lib::sdl_lib(t_info *info) {
@@ -266,7 +266,7 @@ void      sdl_lib::PauseMenu(t_info *info) {
   y = (board_height) / 2;
   x = board_width / 3;
   surface = TTF_RenderText_Solid(this->font_head,
-    "GAME OVER", {255, 138, 0});
+    "PAUSE MENU", {255, 138, 0});
   texture = SDL_CreateTextureFromSurface(this->renderer, surface);
   SDL_QueryTexture(texture, NULL, NULL, &texW, &texH);
   dstrect = {x, y, texW, texH};
@@ -276,10 +276,10 @@ void      sdl_lib::PauseMenu(t_info *info) {
 
   if (info->menu_pos == 1){
     surface = TTF_RenderText_Solid(this->font_menu,
-    "Reset", {134, 160, 78});
+    "Continue", {134, 160, 78});
   } else {
     surface = TTF_RenderText_Solid(this->font_menu,
-    "Reset", {255, 255, 255});
+    "Continue", {255, 255, 255});
   }
   texture = SDL_CreateTextureFromSurface(this->renderer, surface);
   SDL_QueryTexture(texture, NULL, NULL, &texW, &texH);

@@ -250,7 +250,7 @@ void        Game::MainLoop()
 {
   int     key_input;
 
-  libManipulation(SDL2);
+  libManipulation(SFML);
   resetGame();
   // _info->status = PLAY;
   while(true) {       
