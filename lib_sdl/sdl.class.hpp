@@ -13,8 +13,6 @@ public:
   sdl_lib() = delete;
   sdl_lib(t_info *info);
   ~sdl_lib();
-  sdl_lib& operator=(sdl_lib const&) = delete;
-  
 
   //  ReadInput 
   int   ReadInput();
@@ -29,6 +27,9 @@ public:
   int   Visual(t_info *info);
 
 private:
+  sdl_lib& operator=(sdl_lib const&) = delete;
+  sdl_lib(sdl_lib const & src) = delete;
+
   TTF_Font      *font_head;
   TTF_Font      *font_menu;
   SDL_Window    *window;

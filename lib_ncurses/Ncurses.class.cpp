@@ -1,4 +1,4 @@
-#include "ncurses.class.hpp"
+#include "Ncurses.class.hpp"
 
 IVisual*  NewVisual(t_info *info) { return new ncurses_lib(info); }
 void      DeleteVisual(IVisual* instance){ delete instance; }

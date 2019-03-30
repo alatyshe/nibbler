@@ -4,7 +4,7 @@ set (CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
 
 project(ncurses_lib)
 set(NCURSES_LIB
-  ncurses.class.cpp
+  Ncurses.class.cpp
 )
 
 # Library

@@ -14,7 +14,7 @@ include_directories(${SDL2_INCLUDE_DIR}
 
 project(sdl2_lib)
 set(SDL_LIB
-  sdl.class.cpp
+  Sdl.class.cpp
 )
 
 # Library

@@ -4,7 +4,7 @@ set (CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
 
 project(sfml_lib)
 set(SFML_LIB
-  sfml.class.cpp
+  Sfml.class.cpp
 )
 
 # Library

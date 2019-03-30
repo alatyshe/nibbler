@@ -62,8 +62,8 @@ public:
 
 private:
   //  Construct
-  Game(const Game &src);
+  Game(Game const &src) = delete;
   //  Copy
-  Game&       operator=(const Game &src);
+  Game &      operator=(Game const &src) = delete;
 
 };

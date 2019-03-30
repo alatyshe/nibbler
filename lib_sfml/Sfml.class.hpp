@@ -15,7 +15,6 @@ public:
   sfml_lib() = delete;
   sfml_lib(t_info *info);
   ~sfml_lib();
-  sfml_lib& operator=(sfml_lib const&) = delete;
 
   //  ReadInput 
   int   ReadInput();
@@ -30,6 +29,9 @@ public:
   int   Visual(t_info *info);
 
 private:
+  sfml_lib& operator=(sfml_lib const&) = delete;
+  sfml_lib(sfml_lib const & src) = delete;
+
   sf::RenderWindow window;
   sf::Font font;
   int status;

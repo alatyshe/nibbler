@@ -11,9 +11,10 @@
 class glfw_lib: public IVisual {
 public:
   glfw_lib();
+
   ~glfw_lib();
   glfw_lib(t_info *info);
-
+  
   //  ReadInput 
   int   ReadInput();
   //  Display Game
@@ -30,6 +31,9 @@ public:
 
 
 private:
+  glfw_lib& operator=(glfw_lib const&) = delete;
+  glfw_lib(glfw_lib const & src) = delete;
+
   GLFWwindow  *window_;
   FTFont      *font_;
   void        DrawSquare(int x, int y);

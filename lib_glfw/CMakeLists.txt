@@ -9,7 +9,7 @@ set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 
 project(glfw_lib)
 set(GLFW_LIB
-  glfw.class.cpp
+  Glfw.class.cpp
 )
 
 find_package(Freetype REQUIRED)

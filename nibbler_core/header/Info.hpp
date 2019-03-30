@@ -48,10 +48,9 @@
 # define RIGHT        261
 # define DOWN         258
 
-# define NCURSES      49
-# define SFML         50
-# define SDL2         51
-# define GLFW         52
+# define SFML         49
+# define SDL2         50
+# define GLFW         51
 
 # define ESC          27
 # define ENTER        10

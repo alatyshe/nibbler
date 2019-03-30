@@ -31,10 +31,6 @@ add_subdirectory(
     ${CMAKE_CURRENT_BINARY_DIR}/lib_glfw)
 
 add_subdirectory(
-    lib_ncurses
-    ${CMAKE_CURRENT_BINARY_DIR}/lib_ncurses)
-
-add_subdirectory(
     lib_sdl
     ${CMAKE_CURRENT_BINARY_DIR}/lib_sdl)
 

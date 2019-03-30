@@ -1,4 +1,4 @@
-#include "sdl.class.hpp"
+#include "Sdl.class.hpp"
 
 IVisual*  NewVisual(t_info *info) { return new sdl_lib(info); }
 void      DeleteVisual(IVisual* instance){ delete instance;}
@@ -86,13 +86,12 @@ int       sdl_lib::ReadInput() {
 
 
     else if (event.key.keysym.sym == SDLK_1)
-      key_ = NCURSES;
-    else if (event.key.keysym.sym == SDLK_2)
       key_ = SFML;
-    else if (event.key.keysym.sym == SDLK_3)
+    else if (event.key.keysym.sym == SDLK_2)
       key_ = SDL2;
-    else if (event.key.keysym.sym == SDLK_4)
+    else if (event.key.keysym.sym == SDLK_3)
       key_ = GLFW;
+      
   }
   return key_;
 }

@@ -22,8 +22,8 @@ public:
   void      SetY(int y);
 
 private:
-  Piece &operator=(const Piece& src);
-  Piece(const Piece &src);
+  Piece &operator=(Piece const & src) = delete;
+  Piece(Piece const & src) = delete;
 
 };
 

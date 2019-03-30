@@ -1,4 +1,4 @@
-#include "sfml.class.hpp"
+#include "Sfml.class.hpp"
 
 IVisual*  NewVisual(t_info *info) { return new sfml_lib(info); }
 void      DeleteVisual(IVisual* instance){ delete instance; }
@@ -59,13 +59,12 @@ int       sfml_lib::ReadInput() {
       key_= DOWN;
 
     else if (event.key.code == sf::Keyboard::Num1)
-      key_ = NCURSES;
-    else if (event.key.code == sf::Keyboard::Num2)
       key_ = SFML;
-    else if (event.key.code == sf::Keyboard::Num3)
+    else if (event.key.code == sf::Keyboard::Num2)
       key_ = SDL2;
-    else if (event.key.code == sf::Keyboard::Num4)
+    else if (event.key.code == sf::Keyboard::Num3)
       key_ = GLFW;
+      
   }
   return key_;
 }

@@ -1,4 +1,4 @@
-#include "glfw.class.hpp"
+#include "Glfw.class.hpp"
 
 IVisual*        NewVisual(t_info *info) { return new glfw_lib(info); }
 void            DeleteVisual(IVisual* instance){ delete instance; }
@@ -27,13 +27,12 @@ extern "C" {
       key_ = UP;
 
     else if (key == GLFW_KEY_1 && action == GLFW_PRESS)
-      key_ = NCURSES;
-    else if (key == GLFW_KEY_2 && action == GLFW_PRESS)
       key_ = SFML;
-    else if (key == GLFW_KEY_3 && action == GLFW_PRESS)
+    else if (key == GLFW_KEY_2 && action == GLFW_PRESS)
       key_ = SDL2;
-    else if (key == GLFW_KEY_4 && action == GLFW_PRESS)
+    else if (key == GLFW_KEY_3 && action == GLFW_PRESS)
       key_ = GLFW;
+      
   }
 }
 

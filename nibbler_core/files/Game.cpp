@@ -1,6 +1,7 @@
 # include "../header/Game.hpp"
 
 Game::Game() { ; }
+
 Game::~Game() { ; }
 
 Game::Game(int width, int height) {
@@ -191,9 +192,7 @@ void        Game::parseKeyInput(int key) {
       _head_move_x = 0;
     }
   }
-  if (key == NCURSES && _info->curr_lib != NCURSES) {
-    libManipulation(NCURSES);
-  } else if (key == SFML && _info->curr_lib != SFML) {
+  if (key == SFML && _info->curr_lib != SFML) {
     libManipulation(SFML);
   } else if (key == SDL2 && _info->curr_lib != SDL2) {
     libManipulation(SDL2);
@@ -207,19 +206,22 @@ void        Game::parseKeyInput(int key) {
 void        Game::libManipulation(int library) {
   IVisual*    (*new_instanse)(t_info *g);         //  указатель на функцию
   void        (*del_instance)(IVisual* instance); //  указатель на функцию
-
+  char        *error;
+   
+  dlerror();    /* Clear any existing error */
   // void        (*DeleteLibWrap)(InterfaceLibrary *);
   if (this->_handle != NULL) {
     del_instance = (void (*) (IVisual*)) dlsym(this->_handle, "DeleteVisual");
+    if ((error = dlerror()) != NULL)
+      throw Exception("Missed Method");
+
     (*del_instance)(_visual);
     dlclose(this->_handle);
     this->_visual = NULL;
     this->_handle = NULL;
   }
 
-  if (library == NCURSES) {
-    this->_handle = dlopen("./lib/libncurses_lib.dylib", RTLD_LAZY);
-  } else if (library == SFML) {
+  if (library == SFML) {
     this->_handle = dlopen("./lib/libsfml_lib.dylib", RTLD_LAZY);
   } else if (library == SDL2) {
     this->_handle = dlopen("./lib/libsdl2_lib.dylib", RTLD_LAZY);
@@ -236,11 +238,15 @@ void        Game::libManipulation(int library) {
   }
   
   if (!this->_handle) {
+
     throw Exception("Missed Library");
   }
 
   _info->curr_lib = library;
   new_instanse = (IVisual* (*) (s_info *)) dlsym(this->_handle, "NewVisual");
+  if ((error = dlerror()) != NULL)
+    throw Exception("Missed Method");
+
   this->_visual = (*new_instanse)(_info);
   if (_info->status == PLAY)
     _info->status = PAUSE_MENU;
@@ -268,6 +274,4 @@ void        Game::MainLoop()
     std::this_thread::sleep_for(std::chrono::milliseconds(260/2));
   }
 }
-
-
 

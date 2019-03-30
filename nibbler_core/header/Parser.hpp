@@ -12,6 +12,6 @@ public:
   int   static parseNumber(std::string &str);
   
 private:
-  Parser  &operator=(const Parser& src);
-  Parser(const Parser &src);
+  Parser  &operator=(Parser const & src) = delete;
+  Parser(Parser const &src) = delete;
 };

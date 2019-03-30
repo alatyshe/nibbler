@@ -13,7 +13,7 @@ RESET	= "\x1b[0m"
 #==================
 
 .PHONY: all
-all: SFML GLFW freetype2 FTGL lib_sfml lib_glfw lib_ncurses lib_sdl nibbler_core
+all: SFML GLFW freetype2 FTGL lib_sfml lib_glfw lib_sdl nibbler_core
 
 .PHONY: clean
 clean:
@@ -60,11 +60,6 @@ lib_sfml: build/Makefile
 lib_glfw: build/Makefile
 	@echo $(YELLOW)"\nCompiling $@ library\n"$(RESET)
 	@(cd build && cmake --build lib_glfw -- -j)
-
-.PHONY: lib_ncurses
-lib_ncurses: build/Makefile
-	@echo $(YELLOW)"\nCompiling $@ library\n"$(RESET)
-	@(cd build && cmake --build lib_ncurses -- -j)
 
 .PHONY: lib_sdl
 lib_sdl: build/Makefile
