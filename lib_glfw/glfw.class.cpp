@@ -119,7 +119,6 @@ void            glfw_lib::Map(t_info *info) {
       }
     }
   }
-
   return ;
 }
 

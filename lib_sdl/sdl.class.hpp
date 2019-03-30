@@ -1,3 +1,5 @@
+# pragma once
+
 #include <SDL2/SDL.h>
 #include <SDL_ttf.h>
 #include <iostream>
@@ -5,9 +7,6 @@
 # include "../abstract/IVisual.hpp"
 
 #define CELL_SIZE   30
-
-class Game;
-class IVisual;
 
 class sdl_lib: public IVisual {
 public:

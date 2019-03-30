@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 3.3)
+set(CMAKE_MACOSX_RPATH 1)
 
 # SDL
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/third_party/cmake_sdl)

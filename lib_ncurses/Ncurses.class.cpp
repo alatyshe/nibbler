@@ -3,8 +3,6 @@
 IVisual*  NewVisual(t_info *info) { return new ncurses_lib(info); }
 void      DeleteVisual(IVisual* instance){ delete instance; }
 
-
-
 ncurses_lib::~ncurses_lib(void) {
   refresh();
   wrefresh(this->screen);
@@ -200,7 +198,6 @@ int       ncurses_lib::Visual(t_info *info) {
     wrefresh(this->screen);
     wrefresh(this->score);
   }
-
   return this->ReadInput();
 }
 

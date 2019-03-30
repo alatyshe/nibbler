@@ -3,9 +3,6 @@
 # include <ncurses.h>
 # include "../abstract/IVisual.hpp"
 
-class Game;
-class IVisual;
-
 class ncurses_lib: public IVisual {
 public:
   ncurses_lib() = delete;

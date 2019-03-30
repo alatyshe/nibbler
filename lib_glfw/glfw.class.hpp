@@ -2,7 +2,6 @@
 
 #include <GLFW/glfw3.h>
 #include <FTGL/ftgl.h>
-// #include <ft2build.h>
 #include FT_FREETYPE_H
 
 # include "../abstract/IVisual.hpp"
