@@ -4,6 +4,7 @@ set (CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
 set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR})
 
 find_package(SDL2 REQUIRED)
+find_package(SDL2_image REQUIRED)
 find_package(SDL2_ttf REQUIRED)
 
 
@@ -21,4 +22,4 @@ add_library(sdl2_lib ${SDL_LIB})
 target_link_libraries(sdl2_lib
 	${SDL2_LIBRARY}
 	${SDL2_IMAGE_LIBRARIES}
-  ${SDL2_TTF_LIBRARIES})
+  	${SDL2_TTF_LIBRARIES})
